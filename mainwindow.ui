@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>999</width>
-    <height>476</height>
+    <width>1020</width>
+    <height>708</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>QNotepad</string>
@@ -17,82 +23,19 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>320</y>
-      <width>831</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
-    </widget>
-   </widget>
-   <widget class="QTabWidget" name="tabWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>0</y>
-      <width>821</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_4">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
-    </widget>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>20</y>
-      <width>821</width>
-      <height>301</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTreeView" name="treeView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>161</width>
-      <height>401</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>999</width>
+     <width>1020</width>
      <height>21</height>
     </rect>
    </property>

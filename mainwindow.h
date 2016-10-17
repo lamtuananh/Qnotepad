@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QtCore>
 #include <QtGui>
+#include "mywindow.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +40,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString mFileName;
+    MyWindow *mywindow;
 };
 
 #endif // MAINWINDOW_H
