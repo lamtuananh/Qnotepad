@@ -56,6 +56,7 @@
     <addaction name="actionPaste"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="actionShowHtml"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -148,6 +149,11 @@
    </property>
    <property name="text">
     <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionShowHtml">
+   <property name="text">
+    <string>showHtml</string>
    </property>
   </action>
  </widget>

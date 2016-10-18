@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <mywindow.h>
+#include <iostream>
 #include <QFileDialog>
 #include <QDirModel>
 
@@ -86,4 +87,15 @@ void MainWindow::on_actionRedo_triggered()
     mywindow->textEdit->redo();
 }
 
+void MainWindow::onTextEditChanged(QString s)
+{
+    //QString *content;
+   //QString  content = mywindow->textEdit->toPlainText();
+   // mywindow->textEdit->setHtml("<p style=\"color:red;\">" + content + "</p>");
+    std::cout<< "Hello , content of text edit is changed"<<endl;
+}
 
+void MainWindow::on_actionShowHtml_triggered()
+{
+    mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
+}

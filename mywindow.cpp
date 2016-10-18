@@ -1,10 +1,13 @@
 #include "mywindow.h"
-
+#include <iostream>
+using namespace std;
 MyWindow::MyWindow()
 {
 
     //get current Project path
-    QString sPath = QDir::currentPath();
+    QString sPath;// = new QString();
+    sPath ="C:\Users\Lam\Qnotepad";
+    cout << sPath.toStdString();
     dirModel = new QFileSystemModel();
   //  dirModel->setFilter( QDir::Name);
 
@@ -13,7 +16,7 @@ MyWindow::MyWindow()
     treeView = new QTreeView();
     treeView->setModel(dirModel);
     textEdit = new QTextEdit();
-
-    this->addWidget(treeView);
+    QObject::connect(textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged(QString)));
+        this->addWidget(treeView);
     this->addWidget(textEdit);
 }

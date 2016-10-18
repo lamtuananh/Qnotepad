@@ -37,6 +37,10 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_actionShowHtml_triggered();
+
+     void onTextEditChanged(QString);
+
 private:
     Ui::MainWindow *ui;
     QString mFileName;
