@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    mywindow.cpp
+        mywindow.cpp \
+    mytextedit.cpp \
+    mysyntaxhighlighter.cpp
 
 HEADERS  += mainwindow.h \
-    mywindow.h
+        mywindow.h \
+    mytextedit.h \
+    mysyntaxhighlighter.h
 
 FORMS    += mainwindow.ui
 

@@ -6,6 +6,7 @@
 #include <QtCore>
 #include <QtGui>
 #include "mywindow.h"
+#include <QLayout>
 
 
 namespace Ui {
@@ -39,12 +40,13 @@ private slots:
 
     void on_actionShowHtml_triggered();
 
-     void onTextEditChanged(QString);
+    void onTextEditChanged();
 
-private:
+public:
     Ui::MainWindow *ui;
-    QString mFileName;
+    QString *mFileName;
     MyWindow *mywindow;
+
 };
 
 #endif // MAINWINDOW_H

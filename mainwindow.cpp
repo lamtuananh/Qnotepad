@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <mywindow.h>
+#include <mainwindow.h>
+#include <ui_mainwindow.h>
+
 #include <iostream>
 #include <QFileDialog>
 #include <QDirModel>
@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mywindow = new MyWindow();
     ui->centralWidget->setLayout(mywindow);
+    QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
+
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +53,7 @@ void MainWindow::on_actionSave_file_triggered()
     if(sFile.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream out(&sFile);
-        out<<mywindow->textEdit->toPlainText();
+        //cout<<mywindow->textEdit->toPlainText();
 
         sFile.flush();
         sFile.close();
@@ -87,15 +89,30 @@ void MainWindow::on_actionRedo_triggered()
     mywindow->textEdit->redo();
 }
 
-void MainWindow::onTextEditChanged(QString s)
+/*void MainWindow::onTextEditChanged()
 {
     //QString *content;
-   //QString  content = mywindow->textEdit->toPlainText();
-   // mywindow->textEdit->setHtml("<p style=\"color:red;\">" + content + "</p>");
-    std::cout<< "Hello , content of text edit is changed"<<endl;
-}
+   QString  content; //= mywindow->textEdit->toPlainText();
+   // mywindow->textEdit->setHtml("<p style=\"color:red;\">" "</p>");
+    mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
 
+    //std::cout<< content.toStdString();
+}
+*/
 void MainWindow::on_actionShowHtml_triggered()
 {
     mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
+}
+void MainWindow::onTextEditChanged()
+{
+/*    if(mywindow->testButton->text() == "Here")
+   mywindow->testButton->setText("CHANGED");
+    else mywindow->testButton->setText("Here");
+    QString s = "<p  style=\"color:blue;\"> " + mywindow->textEdit->toPlainText()+ " </p>";
+    std::cout<<s.toStdString();
+    mywindow->textEdit2->setHtml(s);
+    mywindow->textEdit->setHtml(s);
+*/
+    QString s = "[a-Z]+";
+    mywindow->highlighter->setPattern(s);
 }
