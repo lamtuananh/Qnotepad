@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mywindow = new MyWindow();
     ui->centralWidget->setLayout(mywindow);
-    QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
+   // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
 
 }
 
@@ -114,5 +114,5 @@ void MainWindow::onTextEditChanged()
     mywindow->textEdit->setHtml(s);
 */
     QString s = "[a-Z]+";
-    mywindow->highlighter->setPattern(s);
+    //mywindow->highlighter->setPattern(s);
 }
