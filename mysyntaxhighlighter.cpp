@@ -36,23 +36,17 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
         std::cout<<"errow while reading file";
         return;
     }
-    QTextStream in(&file);\
+    QTextStream in(&file);
      QString line = in.readLine();
 while (!line.isNull()) {
    // QString line = in.readLine();
-          std::cout<<line.toStdString();
-           vector.append("("+line+"[ ])");
+        //  std::cout<<line.toStdString();
+           vector.append("\\b"+line+"\\b");
            // process_line(line);
            line = in.readLine();
        }
-/*    vector.append("([ ]module[ ])");
-    vector.append("([ ]endmodule[ ])");
-    vector.append("([ ]wand[ ])");
-    vector.append("([ ]wor[ ])");
-    vector.append("([ ]tri[ ])");
-    vector.append("([ ]reg[ ])");
-    vector.append("([ ]wire[ ])");
-*/
+    modulePattern = "\\bmodule\\b.{*}\\bendmodule\\b";
+
 }
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
@@ -70,7 +64,7 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
     }
  //   QFont serifFont = mapFont.value(i.key());
  QFont serifFont = QFont("Bavaria",10,QFont::Bold);
-    format.setBackground(Qt::yellow);
+    //format.setBackground(Qt::yellow);
     format.colorProperty(Qt::red);
 
     format.setFont(serifFont);

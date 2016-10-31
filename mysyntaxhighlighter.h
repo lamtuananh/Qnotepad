@@ -9,11 +9,14 @@ class MySyntaxHighlighter : public QSyntaxHighlighter
     public:
    explicit MySyntaxHighlighter(QObject *parent = 0);
     void highlightBlock(const QString &text);
-   // void setPattern(QString str){pattern = str;}
+
 private :
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
+    QString modulePattern;
+    QString commandPattern;
+
 signals:
 public slots:
 };
