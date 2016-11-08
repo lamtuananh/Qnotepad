@@ -14,7 +14,7 @@ MyWindow::MyWindow()
     dirModel->setRootPath(sPath);
     treeView = new QTreeView();
     treeView->setModel(dirModel);
-    textEdit = new MyTextEdit();
+    textEdit = new CodeEditor();
    // textEdit2 = new MyTextEdit();
     highlighter = new MySyntaxHighlighter(this);
     highlighter->setDocument(textEdit->document());

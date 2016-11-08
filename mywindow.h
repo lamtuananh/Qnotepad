@@ -1,6 +1,6 @@
 #ifndef MYWINDOW_H
 #define MYWINDOW_H
-#include <mytextedit.h>
+#include <codeedit.h>
 #include <QtWidgets>
 #include <QWidget>
 #include <QtCore>
@@ -19,7 +19,7 @@ public:
     QFileSystemModel *fileModel;
     QString currentFileName;
     QString *currentFileContent;
-    MyTextEdit *textEdit;
+    CodeEditor *textEdit;
     QTextEdit *textEdit2;
     QPushButton *testButton;
     MySyntaxHighlighter *highlighter;

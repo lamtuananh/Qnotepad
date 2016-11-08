@@ -101,8 +101,9 @@ void MainWindow::on_actionRedo_triggered()
 */
 void MainWindow::on_actionShowHtml_triggered()
 {
-    mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
+  //  mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
 }
+
 void MainWindow::onTextEditChanged()
 {
 /*    if(mywindow->testButton->text() == "Here")
