@@ -15,13 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
         mywindow.cpp \
-    mytextedit.cpp \
-    mysyntaxhighlighter.cpp
+    mysyntaxhighlighter.cpp \
+    codeedit.cpp \
+    linenumberarea.cpp \
+    myfiledialog.cpp
 
 HEADERS  += mainwindow.h \
         mywindow.h \
-    mytextedit.h \
-    mysyntaxhighlighter.h
+    mysyntaxhighlighter.h \
+    codeedit.h \
+    linenumberarea.h \
+    myfiledialog.h
 
 FORMS    += mainwindow.ui
 

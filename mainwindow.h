@@ -42,6 +42,8 @@ private slots:
 
     void onTextEditChanged();
 
+    void onTestButtonClicked();
+
 public:
     Ui::MainWindow *ui;
     QString *mFileName;

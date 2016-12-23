@@ -7,8 +7,11 @@ class MySyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
     public:
-   explicit MySyntaxHighlighter(QObject *parent = 0);
-    void highlightBlock(const QString &text);
+    MySyntaxHighlighter(QObject *parent = 0);
+ //   void highlightBlock(const QString &text);
+
+protected:
+    void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 
 private :
     QMap<QString,QFont> mapFont;
@@ -16,6 +19,24 @@ private :
     QVector<QString> vector;
     QString modulePattern;
     QString commandPattern;
+
+    struct HighlightingRule
+        {
+            QRegExp pattern;
+            QTextCharFormat format;
+        };
+        QVector<HighlightingRule> highlightingRules;
+
+        QRegExp commentStartExpression;
+        QRegExp commentEndExpression;
+
+        QTextCharFormat keywordFormat;
+        QTextCharFormat classFormat;
+        QTextCharFormat singleLineCommentFormat;
+        QTextCharFormat multiLineCommentFormat;
+        QTextCharFormat quotationFormat;
+        QTextCharFormat functionFormat;
+
 
 signals:
 public slots:

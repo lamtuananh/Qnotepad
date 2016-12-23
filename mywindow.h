@@ -25,9 +25,10 @@ public:
     MySyntaxHighlighter *highlighter;
 
   //  MainWindow *mainWindow;
-//public slots:
-  //  void onTextEditChanged();
-
+    /*
+public slots:
+    void onTestButtonClicked();
+*/
 };
 
 #endif // MYWINDOW_H

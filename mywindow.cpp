@@ -7,17 +7,16 @@ MyWindow::MyWindow()
     //get current Project path
     QString sPath;
     sPath =QDir::currentPath();
-   // std::cout << sPath.toStdString();
+    std::cout << sPath.toStdString();
     dirModel = new QFileSystemModel();
   //  dirModel->setFilter( QDir::Name);
-
+    sPath = "C:\\Users\\a.lam.tuan\\";
     dirModel->setRootPath(sPath);
     treeView = new QTreeView();
     treeView->setModel(dirModel);
     textEdit = new CodeEditor();
    // textEdit2 = new MyTextEdit();
-    highlighter = new MySyntaxHighlighter(this);
-    highlighter->setDocument(textEdit->document());
+
     //QString s = "[0-9]+";
 
     //highlighter->setPattern(s);
@@ -26,12 +25,12 @@ MyWindow::MyWindow()
     this->addWidget(textEdit);
     this->addWidget(testButton);
   //  this->addWidget(textEdit2);
-   //  QObject::connect(textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-}/*
-void MyWindow::onTextEditChanged()
-{
-    QString s = "[a-Z]+";
 
-    highlighter->setPattern(s);
+
+}/*
+void MyWindow::onTestButtonClicked()
+{
+    highlighter = new MySyntaxHighlighter(this);
+    highlighter->setDocument(textEdit->document());
 }
 */

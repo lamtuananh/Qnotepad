@@ -14,7 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mywindow = new MyWindow();
     ui->centralWidget->setLayout(mywindow);
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-
+     QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+}
+void MainWindow::onTestButtonClicked()
+{
+    mywindow->highlighter = new MySyntaxHighlighter( mywindow);
+    mywindow->highlighter->setDocument( mywindow->textEdit->document());
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +35,7 @@ void MainWindow::on_actionNew_File_triggered()
 
 void MainWindow::on_actionOpen_file_triggered()
 {
-    QString file= QFileDialog::getOpenFileName(this,"Open the file");
+    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv *.svh *.sh");
     if(!file.isEmpty()){
         QFile sFile(file);
         if(sFile.open(QFile::ReadOnly| QFile::Text)){
@@ -47,7 +52,7 @@ void MainWindow::on_actionOpen_file_triggered()
 void MainWindow::on_actionSave_file_triggered()
 {
     if( mywindow->currentFileName=="")
-         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save");
+         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv *.svh *.sh");
 
     QFile sFile( mywindow->currentFileName);
     if(sFile.open(QFile::WriteOnly | QFile::Text))
@@ -61,7 +66,7 @@ void MainWindow::on_actionSave_file_triggered()
 }
 void MainWindow::on_actionSave_as_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this,"Open file to save");
+    QString file = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv *.svh *.sh");
     if(!file.isEmpty())
     {
          mywindow->currentFileName = file;
