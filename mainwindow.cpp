@@ -13,13 +13,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mywindow = new MyWindow();
     ui->centralWidget->setLayout(mywindow);
+    mywindow->highlighter = new MySyntaxHighlighter( mywindow);
+    mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-     QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+   //  QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
 }
 void MainWindow::onTestButtonClicked()
 {
-    mywindow->highlighter = new MySyntaxHighlighter( mywindow);
-    mywindow->highlighter->setDocument( mywindow->textEdit->document());
+ //   mywindow->highlighter = new MySyntaxHighlighter( mywindow);
+ //   mywindow->highlighter->setDocument( mywindow->textEdit->document());
 }
 
 MainWindow::~MainWindow()

@@ -1,5 +1,5 @@
 #include "mysyntaxhighlighter.h"
-#include<QTextCharFormat>
+#include <QTextCharFormat>
 #include <QMap>
 #include <QFont>
 #include <iostream>
@@ -61,6 +61,9 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        commentStartExpression = QRegExp("/\\*");
        commentEndExpression = QRegExp("\\*/");
 
+       functionStartExpression = QRegExp("function;");
+       functionEndExpression = QRegExp("end;");
+
 }
 /*
 void MySyntaxHighlighter::highlightBlock(const QString &text)
@@ -94,9 +97,11 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
 */
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
+
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
+
         while (index >= 0) {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
@@ -122,4 +127,24 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         setFormat(startIndex, commentLength, multiLineCommentFormat);
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
+
+  /*  setCurrentBlockState(2);
+
+    int startIndex1 = 0;
+    if (previousBlockState() != 3)
+        startIndex1 = functionStartExpression.indexIn(text);
+
+    while (startIndex1 >= 0) {
+        int endIndex1 = functionEndExpression.indexIn(text, startIndex1);
+        int commentLength1;
+        if (endIndex1 == -1) {
+            setCurrentBlockState(3);
+            commentLength1 = text.length() - startIndex1;
+        } else {
+            commentLength1 = endIndex1 - startIndex1
+                            + functionEndExpression.matchedLength();
+        }
+        setFormat(startIndex1, commentLength1, classFormat);
+        startIndex1 = functionStartExpression.indexIn(text, startIndex1 + commentLength1);
+    }*/
 }

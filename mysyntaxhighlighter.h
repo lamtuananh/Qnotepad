@@ -37,6 +37,20 @@ private :
         QTextCharFormat quotationFormat;
         QTextCharFormat functionFormat;
 
+        QTextCharFormat functionStart;
+        QTextCharFormat functionEnd;
+        QRegExp functionStartExpression;
+        QRegExp functionEndExpression;
+
+        QTextCharFormat moduleStart;
+        QTextCharFormat moduleEnd;
+        QRegExp moduleStartExpression;
+        QRegExp moduleEndExpression;
+
+        QTextCharFormat beginStart;
+        QTextCharFormat beginEnd;
+
+
 
 signals:
 public slots:

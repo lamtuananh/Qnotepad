@@ -23,7 +23,7 @@ MyWindow::MyWindow()
     testButton = new QPushButton("Here");
     this->addWidget(treeView);
     this->addWidget(textEdit);
-    this->addWidget(testButton);
+   // this->addWidget(testButton);
   //  this->addWidget(textEdit2);
 
 
