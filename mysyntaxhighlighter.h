@@ -31,11 +31,27 @@ private :
         QRegExp commentEndExpression;
 
         QTextCharFormat keywordFormat;
+        HighlightingRule keywordRule;
+
         QTextCharFormat classFormat;
+        HighlightingRule classRule;
+
         QTextCharFormat singleLineCommentFormat;
+        HighlightingRule singleLineCommentRule;
+
         QTextCharFormat multiLineCommentFormat;
+        HighlightingRule multiLineCommentRule;
+
         QTextCharFormat quotationFormat;
-        QTextCharFormat functionFormat;
+        HighlightingRule quotationRule;
+
+        QTextCharFormat functionNameFormat;
+        HighlightingRule functionNameRule;
+
+        QTextCharFormat numberFormat;
+        HighlightingRule numberRule;
+
+
 
         QTextCharFormat functionStart;
         QTextCharFormat functionEnd;

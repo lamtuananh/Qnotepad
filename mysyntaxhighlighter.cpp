@@ -36,27 +36,37 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 
        classFormat.setFontWeight(QFont::Bold);
        classFormat.setForeground(Qt::darkMagenta);
-       rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
-       rule.format = classFormat;
-       highlightingRules.append(rule);
+       classRule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
+       classRule.format = classFormat;
+       highlightingRules.append(classRule);
 
+       //single line comment format
        singleLineCommentFormat.setForeground(Qt::red);
-       rule.pattern = QRegExp("//[^\n]*");
-       rule.format = singleLineCommentFormat;
-       highlightingRules.append(rule);
+       singleLineCommentRule.pattern = QRegExp("//[^\n]*");
+       singleLineCommentRule.format = singleLineCommentFormat;
+       highlightingRules.append(singleLineCommentRule);
 
        multiLineCommentFormat.setForeground(Qt::red);
 
+       //String format
        quotationFormat.setForeground(Qt::darkGreen);
-       rule.pattern = QRegExp("\".*\"");
-       rule.format = quotationFormat;
-       highlightingRules.append(rule);
+       quotationRule.pattern = QRegExp("\".*\"");
+       quotationRule.format = quotationFormat;
+       highlightingRules.append(quotationRule);
 
-       functionFormat.setFontItalic(true);
-       functionFormat.setForeground(Qt::blue);
-       rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
-       rule.format = functionFormat;
-       highlightingRules.append(rule);
+       //Number format
+       numberFormat.setForeground(Qt::black);
+       numberFormat.setFontWeight(QFont::Bold);
+       numberRule.pattern = QRegExp("\".*\"");
+       numberRule.format = numberFormat;
+       highlightingRules.append(numberRule);
+
+       // function name format
+       functionNameFormat.setFontItalic(true);
+       functionNameFormat.setForeground(Qt::blue);
+       functionNameRule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
+       functionNameRule.format = functionNameFormat;
+       highlightingRules.append(functionNameRule);
 
        commentStartExpression = QRegExp("/\\*");
        commentEndExpression = QRegExp("\\*/");
@@ -65,36 +75,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        functionEndExpression = QRegExp("end;");
 
 }
-/*
-void MySyntaxHighlighter::highlightBlock(const QString &text)
-{
-//    QMapIterator<QString,QString> i(mapPattern);
-  //  while(i.hasNext())
-    for (int i = 0; i < vector.size(); ++i) {
-    QTextCharFormat format;
-    QString pattern = vector[i];
-    QRegExp rx(pattern);
 
-    if(!rx.isValid()  || rx.isEmpty() || rx.exactMatch("")){
-        setFormat(0, text.length(),format);
-        std::cout<<"not correct regular expression";
-        return;
-    }
- //   QFont serifFont = mapFont.value(i.key());
- QFont serifFont = QFont("Bavaria",10,QFont::Bold);
-    //format.setBackground(Qt::yellow);
-    format.colorProperty(Qt::red);
-
-    format.setFont(serifFont);
-    int index = rx.indexIn(text);
-    while (index>=0) {
-        int length = rx.matchedLength();
-        setFormat(index,length,format);
-        index = rx.indexIn(text,index + length);
-    }
-    }
-}
-*/
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
 
@@ -108,6 +89,39 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
             index = expression.indexIn(text, index + length);
         }
     }
+
+     int index;
+    //highlight comment line last
+     QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
+    index = singleLineCommentexpression.indexIn(text);
+    while (index >= 0) {
+        int length = singleLineCommentexpression.matchedLength();
+        setFormat(index, length, singleLineCommentRule.format);
+        index = singleLineCommentexpression.indexIn(text, index + length);
+    }
+      QRegExp quotationexpression(quotationRule.pattern);
+    index = quotationexpression.indexIn(text);
+    while (index >= 0) {
+        int length = quotationexpression.matchedLength();
+        setFormat(index, length, quotationRule.format);
+        index = quotationexpression.indexIn(text, index + length);
+    }
+      QRegExp numberexpression(numberRule.pattern);
+    index = numberexpression.indexIn(text);
+    while (index >= 0) {
+        int length = numberexpression.matchedLength();
+        setFormat(index, length, numberRule.format);
+        index = numberexpression.indexIn(text, index + length);
+    }
+     QRegExp functionNameexpression(functionNameRule.pattern);
+    index = functionNameexpression.indexIn(text);
+    while (index >= 0) {
+        int length = functionNameexpression.matchedLength();
+        setFormat(index, length, functionNameRule.format);
+        index = functionNameexpression.indexIn(text, index + length);
+    }
+
+
     setCurrentBlockState(0);
 
     int startIndex = 0;
