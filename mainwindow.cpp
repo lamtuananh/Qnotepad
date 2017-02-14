@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     mywindow = new MyWindow();
+   // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
     mywindow->highlighter = new MySyntaxHighlighter( mywindow);
     mywindow->highlighter->setDocument( mywindow->textEdit->document());

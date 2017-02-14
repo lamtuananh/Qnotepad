@@ -3,6 +3,7 @@
 #include <codeedit.h>
 #include <QtWidgets>
 #include <QWidget>
+#include <QDockWidget>
 #include <QtCore>
 #include <QtGui>
 #include <QLayout>
@@ -23,7 +24,12 @@ public:
     QTextEdit *textEdit2;
     QPushButton *testButton;
     MySyntaxHighlighter *highlighter;
-
+    QMainWindow *mainWidget,*filesWidget;
+    QDockWidget *dockWidget;
+    QTextEdit *textEdit3;
+       QListWidget *customerList;
+       QListWidget *paragraphsList;
+    void createDockWindows();
   //  MainWindow *mainWindow;
     /*
 public slots:
