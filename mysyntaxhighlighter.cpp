@@ -9,6 +9,13 @@
 MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
+    QFont errorFont  = QFont("Courier",12);
+    errorFont.setUnderline(true);
+    defaultFormat.setFont(errorFont);
+    defaultFormat.setUnderlineColor(Qt::red);
+    defaultFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
+
+
     keywordFormat.setForeground(Qt::blue);
        keywordFormat.setFontWeight(QFont::Bold);
        QStringList keywordPatterns;
@@ -41,6 +48,9 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        highlightingRules.append(classRule);
 
        //single line comment format
+        QFont font= QFont("Courier",12);
+       font.setUnderline(true);
+       singleLineCommentFormat.setFont(font);
        singleLineCommentFormat.setForeground(Qt::red);
        singleLineCommentRule.pattern = QRegExp("//[^\n]*");
        singleLineCommentRule.format = singleLineCommentFormat;
@@ -64,6 +74,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        // function name format
        functionNameFormat.setFontItalic(true);
        functionNameFormat.setForeground(Qt::blue);
+
        functionNameRule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
        functionNameRule.format = functionNameFormat;
        highlightingRules.append(functionNameRule);
@@ -79,6 +90,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
 
+    setFormat(0,text.length(),defaultFormat);
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);

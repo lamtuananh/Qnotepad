@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QLayout>
 #include <mysyntaxhighlighter.h>
-class MyWindow :public QHBoxLayout
+class MyWindow :public QGridLayout
 {
   //  Q_OBJECT
 public:
@@ -21,6 +21,7 @@ public:
     QString currentFileName;
     QString *currentFileContent;
     CodeEditor *textEdit;
+    QVector<CodeEditor> textEditAreas;
     QTextEdit *textEdit2;
     QPushButton *testButton;
     MySyntaxHighlighter *highlighter;

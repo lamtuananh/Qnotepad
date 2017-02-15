@@ -25,7 +25,10 @@ private :
             QRegExp pattern;
             QTextCharFormat format;
         };
-        QVector<HighlightingRule> highlightingRules;
+
+     QTextCharFormat defaultFormat;
+    QVector<HighlightingRule> highlightingRules;
+
 
         QRegExp commentStartExpression;
         QRegExp commentEndExpression;

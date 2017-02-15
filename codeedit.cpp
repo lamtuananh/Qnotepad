@@ -17,7 +17,11 @@
      connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
      connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
      connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-     this->setFont(QFont ("Courier", 12));
+
+    QFont font = QFont("Courier",12);
+   // font.setUnderline(true);
+    this->setFont(font);
+    //this->setFont(QFont ("Courier", 12));
 
      updateLineNumberAreaWidth(0);
      highlightCurrentLine();
@@ -52,6 +56,7 @@
  void CodeEditor::resizeEvent(QResizeEvent *e)
  {
      QPlainTextEdit::resizeEvent(e);
+
 
      QRect cr = contentsRect();
      lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));

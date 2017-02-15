@@ -25,11 +25,11 @@ MyWindow::MyWindow()
 
     //highlighter->setPattern(s);
     testButton = new QPushButton("Here");
-   // this->addWidget(dockWidget);
+//    this->addWidget(dockWidget);
 //    this->addWidget(treeView);
 //    this->addWidget(textEdit);
-    this->addWidget(mainWidget);
-    this->addWidget(filesWidget);
+    this->addWidget(filesWidget,0,0);
+    this->addWidget(mainWidget,0,1,1,3);
 
     //createDockWindows();
     //this->addWidget(testButton);
@@ -45,14 +45,15 @@ void MyWindow::createDockWindows()
 
     mainWidget->addDockWidget(Qt::LeftDockWidgetArea, dock);
 
-    dock = new QDockWidget(tr("Working file"), mainWidget);
+    dock = new QDockWidget(tr("Working file"), filesWidget);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
 
     dock->setWidget(textEdit);
 
-    mainWidget->addDockWidget(Qt::RightDockWidgetArea, dock);
+    filesWidget->addDockWidget(Qt::RightDockWidgetArea, dock);
 
-}/*
+}
+/*
 void MyWindow::createNewFileWindows(QString fileName)
 {
     QDockWidget *dock = new QDockWidget(tr(fileName), mainWidget);
