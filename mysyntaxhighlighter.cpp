@@ -13,7 +13,9 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
     errorFont.setUnderline(true);
     defaultFormat.setFont(errorFont);
     defaultFormat.setUnderlineColor(Qt::red);
-    defaultFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
+   // defaultFormat.setUnderlineStyle(QTextCharFormat::);
+
+
 
 
     keywordFormat.setForeground(Qt::blue);
@@ -45,16 +47,16 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        classFormat.setForeground(Qt::darkMagenta);
        classRule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
        classRule.format = classFormat;
-       highlightingRules.append(classRule);
+    //   highlightingRules.append(classRule);
 
        //single line comment format
         QFont font= QFont("Courier",12);
-       font.setUnderline(true);
+       font.setUnderline(false);
        singleLineCommentFormat.setFont(font);
        singleLineCommentFormat.setForeground(Qt::red);
        singleLineCommentRule.pattern = QRegExp("//[^\n]*");
        singleLineCommentRule.format = singleLineCommentFormat;
-       highlightingRules.append(singleLineCommentRule);
+  //     highlightingRules.append(singleLineCommentRule);
 
        multiLineCommentFormat.setForeground(Qt::red);
 
@@ -62,14 +64,28 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        quotationFormat.setForeground(Qt::darkGreen);
        quotationRule.pattern = QRegExp("\".*\"");
        quotationRule.format = quotationFormat;
-       highlightingRules.append(quotationRule);
+     //  highlightingRules.append(quotationRule);
 
        //Number format
        numberFormat.setForeground(Qt::black);
        numberFormat.setFontWeight(QFont::Bold);
-       numberRule.pattern = QRegExp("\".*\"");
+       numberRule.pattern = QRegExp("\\b[0-9]+");
        numberRule.format = numberFormat;
-       highlightingRules.append(numberRule);
+     //  highlightingRules.append(numberRule);
+
+       //Hex Number format
+       hexNumberFormat.setForeground(Qt::black);
+       hexNumberFormat.setFontWeight(QFont::Bold);
+       hexNumberRule.pattern = QRegExp("0[xX][0-9a-fA-F]+");
+       hexNumberRule.format = numberFormat;
+    //   highlightingRules.append(hexNumberRule);
+
+       //blank characters format
+       blankFormat.setForeground(Qt::black);
+       blankFormat.setFontWeight(QFont::Bold);
+       blankRule.pattern = QRegExp("^\\s*(.*)\\s*");
+       blankRule.format = blankFormat;
+    //   highlightingRules.append(blankRule);
 
        // function name format
        functionNameFormat.setFontItalic(true);
@@ -77,7 +93,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 
        functionNameRule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
        functionNameRule.format = functionNameFormat;
-       highlightingRules.append(functionNameRule);
+    //   highlightingRules.append(functionNameRule);
 
        commentStartExpression = QRegExp("/\\*");
        commentEndExpression = QRegExp("\\*/");
@@ -89,8 +105,15 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
-
-    setFormat(0,text.length(),defaultFormat);
+ int index;
+   /* QRegExp blankexpression(blankRule.pattern);
+       index = blankexpression.indexIn(text);
+       while (index >= 0) {
+           int length = blankexpression.matchedLength();
+           setFormat(index, length,defaultFormat);
+           index = blankexpression.indexIn(text, index + length);
+       }
+  */  setFormat(0,text.length(),defaultFormat);
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
@@ -102,30 +125,39 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         }
     }
 
-     int index;
-    //highlight comment line last
-     QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
-    index = singleLineCommentexpression.indexIn(text);
+
+
+ /*    QRegExp blankexpression(blankRule.pattern);
+    index = blankexpression.indexIn(text);
     while (index >= 0) {
-        int length = singleLineCommentexpression.matchedLength();
-        setFormat(index, length, singleLineCommentRule.format);
-        index = singleLineCommentexpression.indexIn(text, index + length);
+        int length = blankexpression.matchedLength();
+        setFormat(index, length, blankRule.format);
+        index = blankexpression.indexIn(text, index + length);
     }
-      QRegExp quotationexpression(quotationRule.pattern);
+*/
+        QRegExp quotationexpression(quotationRule.pattern);
     index = quotationexpression.indexIn(text);
     while (index >= 0) {
         int length = quotationexpression.matchedLength();
         setFormat(index, length, quotationRule.format);
         index = quotationexpression.indexIn(text, index + length);
     }
-      QRegExp numberexpression(numberRule.pattern);
+        QRegExp numberexpression(numberRule.pattern);
     index = numberexpression.indexIn(text);
     while (index >= 0) {
         int length = numberexpression.matchedLength();
         setFormat(index, length, numberRule.format);
         index = numberexpression.indexIn(text, index + length);
     }
-     QRegExp functionNameexpression(functionNameRule.pattern);
+
+        QRegExp hexnumberexpression(hexNumberRule.pattern);
+    index = hexnumberexpression.indexIn(text);
+    while (index >= 0) {
+      int length = hexnumberexpression.matchedLength();
+      setFormat(index, length, hexNumberRule.format);
+      index = hexnumberexpression.indexIn(text, index + length);
+    }
+        QRegExp functionNameexpression(functionNameRule.pattern);
     index = functionNameexpression.indexIn(text);
     while (index >= 0) {
         int length = functionNameexpression.matchedLength();
@@ -133,6 +165,14 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         index = functionNameexpression.indexIn(text, index + length);
     }
 
+    //highlight comment line last
+        QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
+    index = singleLineCommentexpression.indexIn(text);
+    while (index >= 0) {
+        int length = singleLineCommentexpression.matchedLength();
+        setFormat(index, length, singleLineCommentRule.format);
+        index = singleLineCommentexpression.indexIn(text, index + length);
+    }
 
     setCurrentBlockState(0);
 

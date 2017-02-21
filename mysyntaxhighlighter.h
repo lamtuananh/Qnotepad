@@ -54,6 +54,11 @@ private :
         QTextCharFormat numberFormat;
         HighlightingRule numberRule;
 
+        QTextCharFormat hexNumberFormat;
+        HighlightingRule hexNumberRule;
+
+        QTextCharFormat blankFormat;
+        HighlightingRule blankRule;
 
 
         QTextCharFormat functionStart;
