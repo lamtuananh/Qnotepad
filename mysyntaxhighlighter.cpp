@@ -6,6 +6,13 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+//inicialization fonts
+
+//static const QFont TEXTFONT = QFont("Courier",12);
+
+
+
+
 MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
@@ -49,6 +56,12 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        classRule.format = classFormat;
     //   highlightingRules.append(classRule);
 
+       //Include
+       includeFormat.setFontWeight(QFont::Bold);
+       includeFormat.setForeground(Qt::green);
+       includeRule.pattern = QRegExp("^\`include ");
+       includeRule.format = includeFormat;
+
        //single line comment format
         QFont font= QFont("Courier",12);
        font.setUnderline(false);
@@ -69,22 +82,27 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        //Number format
        numberFormat.setForeground(Qt::black);
        numberFormat.setFontWeight(QFont::Bold);
-       numberRule.pattern = QRegExp("\\b[0-9]+");
-       numberRule.format = numberFormat;
+       decimalNumberRule.pattern = QRegExp("\\b[0-9]+");
+       decimalNumberRule.format = numberFormat;
      //  highlightingRules.append(numberRule);
 
        //Hex Number format
-       hexNumberFormat.setForeground(Qt::black);
-       hexNumberFormat.setFontWeight(QFont::Bold);
        hexNumberRule.pattern = QRegExp("0[xX][0-9a-fA-F]+");
        hexNumberRule.format = numberFormat;
-    //   highlightingRules.append(hexNumberRule);
+
+       //identifier format
+
+       identifierFormat.setForeground(Qt::blue);
+       identifierRule.pattern = QRegExp("[_a-zA-Z][_a-zA-Z0-9]{0,30}");
+       identifierRule.format = numberFormat;
+
+       //   highlightingRules.append(hexNumberRule);
 
        //blank characters format
-       blankFormat.setForeground(Qt::black);
+       blankFormat.setForeground(Qt::green);
        blankFormat.setFontWeight(QFont::Bold);
-       blankRule.pattern = QRegExp("^\\s*(.*)\\s*");
-       blankRule.format = blankFormat;
+       blankRule.pattern = QRegExp("^[0-9a-Z]{1,*}?");
+       blankRule.format = defaultFormat;
     //   highlightingRules.append(blankRule);
 
        // function name format
@@ -105,7 +123,20 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
- int index;
+ /*   qInfo() << "C++ Style Info Message";
+    qInfo( "C Style Info Message" );
+
+    qDebug() << "C++ Style Debug Message";
+    qDebug( "C Style Debug Message" );
+
+    qWarning() << "C++ Style Warning Message";
+    qWarning( "C Style Warning Message" );
+
+    qCritical() << "C++ Style Critical Error Message";
+    qCritical( "C Style Critical Error Message" );*/
+    QTextStream out(stdout);
+    out<< "text changed!!" <<endl;
+    int index;
    /* QRegExp blankexpression(blankRule.pattern);
        index = blankexpression.indexIn(text);
        while (index >= 0) {
@@ -113,7 +144,16 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
            setFormat(index, length,defaultFormat);
            index = blankexpression.indexIn(text, index + length);
        }
-  */  setFormat(0,text.length(),defaultFormat);
+  */
+
+    QRegExp blankexpression(blankRule.pattern);
+           index = blankexpression.indexIn(text);
+           while (index >= 0) {
+               int length = blankexpression.matchedLength();
+               setFormat(index, length,defaultFormat);
+               index = blankexpression.indexIn(text, index + length);
+           }
+//    setFormat(0,text.length(),defaultFormat);
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
@@ -126,6 +166,14 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
     }
 
 
+    QRegExp includerexpression(includeRule.pattern);
+index = includerexpression.indexIn(text);
+while (index >= 0) {
+     out<< "error text matched changed!!" <<endl;
+    int length = includerexpression.matchedLength();
+    setFormat(index, length, includeRule.format);
+    index = includerexpression.indexIn(text, index + length);
+}
 
  /*    QRegExp blankexpression(blankRule.pattern);
     index = blankexpression.indexIn(text);
@@ -135,18 +183,12 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         index = blankexpression.indexIn(text, index + length);
     }
 */
-        QRegExp quotationexpression(quotationRule.pattern);
-    index = quotationexpression.indexIn(text);
-    while (index >= 0) {
-        int length = quotationexpression.matchedLength();
-        setFormat(index, length, quotationRule.format);
-        index = quotationexpression.indexIn(text, index + length);
-    }
-        QRegExp numberexpression(numberRule.pattern);
+
+        QRegExp numberexpression(decimalNumberRule.pattern);
     index = numberexpression.indexIn(text);
     while (index >= 0) {
         int length = numberexpression.matchedLength();
-        setFormat(index, length, numberRule.format);
+        setFormat(index, length, decimalNumberRule.format);
         index = numberexpression.indexIn(text, index + length);
     }
 
@@ -164,6 +206,7 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         setFormat(index, length, functionNameRule.format);
         index = functionNameexpression.indexIn(text, index + length);
     }
+
 
     //highlight comment line last
         QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
@@ -194,23 +237,12 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
 
-  /*  setCurrentBlockState(2);
-
-    int startIndex1 = 0;
-    if (previousBlockState() != 3)
-        startIndex1 = functionStartExpression.indexIn(text);
-
-    while (startIndex1 >= 0) {
-        int endIndex1 = functionEndExpression.indexIn(text, startIndex1);
-        int commentLength1;
-        if (endIndex1 == -1) {
-            setCurrentBlockState(3);
-            commentLength1 = text.length() - startIndex1;
-        } else {
-            commentLength1 = endIndex1 - startIndex1
-                            + functionEndExpression.matchedLength();
-        }
-        setFormat(startIndex1, commentLength1, classFormat);
-        startIndex1 = functionStartExpression.indexIn(text, startIndex1 + commentLength1);
-    }*/
+    //String highlight
+        QRegExp quotationexpression(quotationRule.pattern);
+    index = quotationexpression.indexIn(text);
+    while (index >= 0) {
+        int length = quotationexpression.matchedLength();
+        setFormat(index, length, quotationRule.format);
+        index = quotationexpression.indexIn(text, index + length);
+    }
 }

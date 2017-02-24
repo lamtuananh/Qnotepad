@@ -36,6 +36,10 @@ private :
         QTextCharFormat keywordFormat;
         HighlightingRule keywordRule;
 
+        QTextCharFormat includeFormat;
+        HighlightingRule includeRule;
+
+
         QTextCharFormat classFormat;
         HighlightingRule classRule;
 
@@ -52,10 +56,11 @@ private :
         HighlightingRule functionNameRule;
 
         QTextCharFormat numberFormat;
-        HighlightingRule numberRule;
+        HighlightingRule decimalNumberRule,hexNumberRule,binaryNumberRule,realNumberRule,octalNumberRule;
 
-        QTextCharFormat hexNumberFormat;
-        HighlightingRule hexNumberRule;
+        QTextCharFormat identifierFormat;
+        HighlightingRule identifierRule;
+
 
         QTextCharFormat blankFormat;
         HighlightingRule blankRule;
