@@ -21,8 +21,9 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
     defaultFormat.setFont(errorFont);
     defaultFormat.setUnderlineColor(Qt::red);
    // defaultFormat.setUnderlineStyle(QTextCharFormat::);
-
-
+    QFont normalFont  = QFont("Courier",12);
+    normalFont.setUnderline(false);
+    blankFormat.setFont(normalFont);
 
 
     keywordFormat.setForeground(Qt::blue);
@@ -82,12 +83,12 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        //Number format
        numberFormat.setForeground(Qt::black);
        numberFormat.setFontWeight(QFont::Bold);
-       decimalNumberRule.pattern = QRegExp("\\b[0-9]+");
+       decimalNumberRule.pattern = QRegExp("\\b[0-9]+\\b");
        decimalNumberRule.format = numberFormat;
      //  highlightingRules.append(numberRule);
 
        //Hex Number format
-       hexNumberRule.pattern = QRegExp("0[xX][0-9a-fA-F]+");
+       hexNumberRule.pattern = QRegExp("\\b0[xX][0-9a-fA-F]+\\b");
        hexNumberRule.format = numberFormat;
 
        //identifier format
@@ -101,7 +102,10 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        //blank characters format
        blankFormat.setForeground(Qt::green);
        blankFormat.setFontWeight(QFont::Bold);
-       blankRule.pattern = QRegExp("^[0-9a-Z]{1,*}?");
+       //blankRule.pattern = QRegExp("[a-zA-Z0-9+-*/,./_]+");
+       blankRule.pattern = QRegExp("/^$|\s+/");
+
+
        blankRule.format = defaultFormat;
     //   highlightingRules.append(blankRule);
 
@@ -145,15 +149,16 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
            index = blankexpression.indexIn(text, index + length);
        }
   */
-
+    setFormat(0,text.length(),defaultFormat);
     QRegExp blankexpression(blankRule.pattern);
            index = blankexpression.indexIn(text);
            while (index >= 0) {
+                 out<< "errorrrrrrrrrrr text matched changed!!" <<endl;
                int length = blankexpression.matchedLength();
-               setFormat(index, length,defaultFormat);
+               setFormat(index, length,blankRule.format);
                index = blankexpression.indexIn(text, index + length);
            }
-//    setFormat(0,text.length(),defaultFormat);
+
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
@@ -175,7 +180,8 @@ while (index >= 0) {
     index = includerexpression.indexIn(text, index + length);
 }
 
- /*    QRegExp blankexpression(blankRule.pattern);
+ /*
+    QRegExp blankexpression(blankRule.pattern);
     index = blankexpression.indexIn(text);
     while (index >= 0) {
         int length = blankexpression.matchedLength();
@@ -209,15 +215,19 @@ while (index >= 0) {
 
 
     //highlight comment line last
-        QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
+  if(currentBlockState()!= 1){
+    QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
     index = singleLineCommentexpression.indexIn(text);
     while (index >= 0) {
         int length = singleLineCommentexpression.matchedLength();
+        setCurrentBlockState(3);
         setFormat(index, length, singleLineCommentRule.format);
         index = singleLineCommentexpression.indexIn(text, index + length);
     }
-
-    setCurrentBlockState(0);
+}
+   if(currentBlockState()!= 3)
+   {
+       setCurrentBlockState(0);
 
     int startIndex = 0;
     if (previousBlockState() != 1)
@@ -236,12 +246,13 @@ while (index >= 0) {
         setFormat(startIndex, commentLength, multiLineCommentFormat);
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
-
+}
     //String highlight
         QRegExp quotationexpression(quotationRule.pattern);
     index = quotationexpression.indexIn(text);
     while (index >= 0) {
         int length = quotationexpression.matchedLength();
+        if(currentBlockState()!=3)
         setFormat(index, length, quotationRule.format);
         index = quotationexpression.indexIn(text, index + length);
     }
