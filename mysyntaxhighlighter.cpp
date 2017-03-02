@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include "checkthread.h"
 //inicialization fonts
 
 //static const QFont TEXTFONT = QFont("Courier",12);
@@ -41,6 +42,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        QTextStream in(&file);
         QString line = in.readLine();
    while (!line.isNull()) {
+       // CheckThread::listWords.append(line);
         keywordPatterns.append("\\b"+line+"\\b");
               line = in.readLine();
           }

@@ -4,23 +4,31 @@
 #include <iostream>
 #include <QFileDialog>
 #include <QDirModel>
-
+#include <checkthread.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     mywindow = new MyWindow();
+     mythread = new CheckThread(mywindow);
    // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
     mywindow->highlighter = new MySyntaxHighlighter( mywindow);
     mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-   //  QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+     QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+     QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
+
 }
 void MainWindow::onTestButtonClicked()
 {
+
+   // CheckThread *mythread = new CheckThread();
+    mythread->start();
+    //mythread.start();
  //   mywindow->highlighter = new MySyntaxHighlighter( mywindow);
  //   mywindow->highlighter->setDocument( mywindow->textEdit->document());
 }

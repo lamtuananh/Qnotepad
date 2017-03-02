@@ -18,14 +18,19 @@ SOURCES += main.cpp\
     mysyntaxhighlighter.cpp \
     codeedit.cpp \
     linenumberarea.cpp \
-    myfiledialog.cpp
+    myfiledialog.cpp \
+   # globals.cpp
+    printer.cpp \
+    checkthread.cpp
 
 HEADERS  += mainwindow.h \
         mywindow.h \
     mysyntaxhighlighter.h \
     codeedit.h \
     linenumberarea.h \
-    myfiledialog.h
+    myfiledialog.h \
+   # globals.h
+    checkthread.h
 
 FORMS    += mainwindow.ui
 

@@ -7,6 +7,7 @@
 #include <QtGui>
 #include "mywindow.h"
 #include <QLayout>
+#include "checkthread.h"
 
 
 namespace Ui {
@@ -20,6 +21,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    CheckThread *mythread;
 
 private slots:
     void on_actionNew_File_triggered();

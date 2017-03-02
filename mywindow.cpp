@@ -24,13 +24,13 @@ MyWindow::MyWindow()
     //QString s = "[0-9]+";
 
     //highlighter->setPattern(s);
-    testButton = new QPushButton("Here");
+    testButton = new QPushButton("Start check !!!");
 //    this->addWidget(dockWidget);
 //    this->addWidget(treeView);
 //    this->addWidget(textEdit);
     this->addWidget(filesWidget,0,0);
     this->addWidget(mainWidget,0,1,1,3);
-
+    this->addWidget(testButton);
     //createDockWindows();
     //this->addWidget(testButton);
     //this->addWidget(textEdit2);
