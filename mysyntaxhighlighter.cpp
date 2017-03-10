@@ -16,16 +16,18 @@
 
 MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(parent)
 {
-    HighlightingRule rule;
-    QFont errorFont  = QFont("Courier",12);
-    errorFont.setUnderline(true);
-    defaultFormat.setFont(errorFont);
-    defaultFormat.setUnderlineColor(Qt::red);
-   // defaultFormat.setUnderlineStyle(QTextCharFormat::);
-    QFont normalFont  = QFont("Courier",12);
-    normalFont.setUnderline(false);
-    blankFormat.setFont(normalFont);
+    //keywords
+ //   identifierRule.pattern = QRegExp("/^([a-z]+)(,\s*[a-z]+)*$/i");
+//  /^([a-z]+)(,\s*[a-z]+)*$/i
 
+
+     HighlightingRule rule;
+    QFont errorFont  = QFont("Courier",12);
+    defaultFormat.setFont(errorFont);
+    // defaultFormat.setUnderlineStyle(QTextCharFormat::);
+    QFont normalFont  = QFont("Courier",12);
+    blankFormat.setFont(normalFont);
+    defaultFormat.setFont(normalFont);
 
     keywordFormat.setForeground(Qt::blue);
        keywordFormat.setFontWeight(QFont::Bold);
@@ -47,12 +49,26 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
               line = in.readLine();
           }
 
+
+
+
        foreach (const QString &pattern, keywordPatterns) {
            rule.pattern = QRegExp(pattern);
            rule.format = keywordFormat;
            highlightingRules.append(rule);
        }
-
+       foreach (const QString &pattern, datatypes) {
+           rule.pattern = QRegExp(pattern);
+           rule.format = keywordFormat;
+           highlightingRules.append(rule);
+       }
+       errorFont.setBold(true);
+       errorFont.setItalic(true);
+        variableFormat.setFont(errorFont);
+       initVariableRule.pattern = QRegExp("\\b(input\\s+|output\\s+)?(wire|supply0|supply1|wand|trior|wor|shortint|int|longint|byte|bit|logic|reg|integer|time)\\s+[_a-zA-Z0-9$]+\s\*(\\[[0-9]\*:[0-9]\*\\])?\\s\*(,\\s\*[_a-zA-Z0-9$]+\\s\*\s\*(\\[[0-9]\*:[0-9]\*\\])?\\s\*)\*;");
+       initVariableRule.format = variableFormat;
+       variableRule.pattern = QRegExp("\\b[a-z]+\\b");
+       variableRule.format = variableFormat;
        classFormat.setFontWeight(QFont::Bold);
        classFormat.setForeground(Qt::darkMagenta);
        classRule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
@@ -97,9 +113,9 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
 
        identifierFormat.setForeground(Qt::blue);
        identifierRule.pattern = QRegExp("[_a-zA-Z][_a-zA-Z0-9]{0,30}");
-       identifierRule.format = numberFormat;
+       identifierRule.format = keywordFormat;
 
-       //   highlightingRules.append(hexNumberRule);
+    //      highlightingRules.append(identifierRule);
 
        //blank characters format
        blankFormat.setForeground(Qt::green);
@@ -141,7 +157,7 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
     qCritical() << "C++ Style Critical Error Message";
     qCritical( "C Style Critical Error Message" );*/
     QTextStream out(stdout);
-    out<< "text changed!!" <<endl;
+ //   out<< "text changed!!" <<endl;
     int index;
    /* QRegExp blankexpression(blankRule.pattern);
        index = blankexpression.indexIn(text);
@@ -164,8 +180,9 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
     foreach (const HighlightingRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
-
         while (index >= 0) {
+           // out<< "datatypes !!" <<endl;
+
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
             index = expression.indexIn(text, index + length);
@@ -214,7 +231,38 @@ while (index >= 0) {
         setFormat(index, length, functionNameRule.format);
         index = functionNameexpression.indexIn(text, index + length);
     }
+    QRegExp initVariableExpression(initVariableRule.pattern);
+    index = initVariableExpression.indexIn(text);
+    while (index >= 0) {
+    int length = initVariableExpression.matchedLength();
+    QString pom = text.right(text.length() - index).left(length);
+    QRegExp variableExpression(variableRule.pattern);
+    int varindex = variableExpression.indexIn(pom);
+    //out<<"pom: "<<pom<<endl;
+    while(varindex>=0)
+    {
+        int varlength = variableExpression.matchedLength();
+        out<< "variable index: "<<varindex <<endl;
+        out<< "variable length: "<<varlength <<endl;
+        setFormat(varindex,varlength,variableRule.format);
+        varindex = variableExpression.indexIn(pom, varindex+varlength);
+    }
+ //   setFormat(index, length, initVariableRule.format);
+    index = initVariableExpression.indexIn(text, index + length);
+}
 
+
+foreach (const HighlightingRule &rule, highlightingRules) {
+    QRegExp expression(rule.pattern);
+    int index = expression.indexIn(text);
+    while (index >= 0) {
+       // out<< "datatypes !!" <<endl;
+
+        int length = expression.matchedLength();
+        setFormat(index, length, rule.format);
+        index = expression.indexIn(text, index + length);
+    }
+}
 
     //highlight comment line last
   if(currentBlockState()!= 1){

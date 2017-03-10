@@ -17,6 +17,9 @@ private :
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
+    QVector<QString> datatypes;
+
+
     QString modulePattern;
     QString commandPattern;
 
@@ -38,6 +41,11 @@ private :
 
         QTextCharFormat includeFormat;
         HighlightingRule includeRule;
+
+        QTextCharFormat variableFormat;
+        HighlightingRule initVariableRule;
+        HighlightingRule variableRule;
+
 
 
         QTextCharFormat classFormat;
