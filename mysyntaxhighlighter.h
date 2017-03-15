@@ -12,7 +12,8 @@ class MySyntaxHighlighter : public QSyntaxHighlighter
 
 protected:
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
-
+  //  void rehighlight() Q_DECL_OVERRIDE;
+   // void rehighlightBlock(const QTextBlock &block) Q_DECL_OVERRIDE;
 private :
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;
@@ -42,6 +43,9 @@ private :
         QTextCharFormat includeFormat;
         HighlightingRule includeRule;
 
+        QTextCharFormat defineFormat;
+        HighlightingRule defineRule;
+
         QTextCharFormat variableFormat;
         HighlightingRule initVariableRule;
         HighlightingRule variableRule;
@@ -70,6 +74,9 @@ private :
         HighlightingRule identifierRule;
 
 
+        QTextCharFormat systemFunctionFormat;
+        HighlightingRule systemFunctionRule;
+
         QTextCharFormat blankFormat;
         HighlightingRule blankRule;
 
@@ -89,8 +96,10 @@ private :
 
 
 
+
 signals:
 public slots:
+
 };
 
 #endif // MYSYNTAXHIGHLIGHTER_H
