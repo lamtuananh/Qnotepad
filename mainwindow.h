@@ -9,6 +9,14 @@
 #include <QLayout>
 #include "checkthread.h"
 
+class QAbstractItemModel;
+class QComboBox;
+class QCompleter;
+class QLabel;
+class QLineEdit;
+class QProgressBar;
+
+class TextEdit;
 
 namespace Ui {
 class MainWindow;
@@ -50,6 +58,14 @@ public:
     Ui::MainWindow *ui;
     QString *mFileName;
     MyWindow *mywindow;
+
+    //autocompleter
+
+
+private:
+
+    QAbstractItemModel *modelFromFile(const QString& fileName);
+    QCompleter *completer;
 
 };
 

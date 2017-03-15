@@ -10,9 +10,13 @@
 //inicialization fonts
 
 //static const QFont TEXTFONT = QFont("Courier",12);
+int INSTRING = 1;
+int OUTOFCOMMENT = 2;
+int INCOMMENT = 3;
+int INSINGLECOMMENT = 4;
 
 
-
+QTextStream out(stdout);
 
 MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(parent)
 {
@@ -142,31 +146,12 @@ MySyntaxHighlighter::MySyntaxHighlighter(QObject *parent) : QSyntaxHighlighter(p
        functionEndExpression = QRegExp("end;");
 
 }
-
+/*
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
- /*   qInfo() << "C++ Style Info Message";
-    qInfo( "C Style Info Message" );
-
-    qDebug() << "C++ Style Debug Message";
-    qDebug( "C Style Debug Message" );
-
-    qWarning() << "C++ Style Warning Message";
-    qWarning( "C Style Warning Message" );
-
-    qCritical() << "C++ Style Critical Error Message";
-    qCritical( "C Style Critical Error Message" );*/
     QTextStream out(stdout);
- //   out<< "text changed!!" <<endl;
     int index;
-   /* QRegExp blankexpression(blankRule.pattern);
-       index = blankexpression.indexIn(text);
-       while (index >= 0) {
-           int length = blankexpression.matchedLength();
-           setFormat(index, length,defaultFormat);
-           index = blankexpression.indexIn(text, index + length);
-       }
-  */
+
     setFormat(0,text.length(),defaultFormat);
     QRegExp blankexpression(blankRule.pattern);
            index = blankexpression.indexIn(text);
@@ -191,23 +176,16 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
 
 
     QRegExp includerexpression(includeRule.pattern);
+    int x = 0;
 index = includerexpression.indexIn(text);
 while (index >= 0) {
      out<< "error text matched changed!!" <<endl;
     int length = includerexpression.matchedLength();
     setFormat(index, length, includeRule.format);
     index = includerexpression.indexIn(text, index + length);
+   return;
 }
-
- /*
-    QRegExp blankexpression(blankRule.pattern);
-    index = blankexpression.indexIn(text);
-    while (index >= 0) {
-        int length = blankexpression.matchedLength();
-        setFormat(index, length, blankRule.format);
-        index = blankexpression.indexIn(text, index + length);
-    }
-*/
+//if(x==1) return;
 
         QRegExp numberexpression(decimalNumberRule.pattern);
     index = numberexpression.indexIn(text);
@@ -270,14 +248,18 @@ foreach (const HighlightingRule &rule, highlightingRules) {
     index = singleLineCommentexpression.indexIn(text);
     while (index >= 0) {
         int length = singleLineCommentexpression.matchedLength();
-        setCurrentBlockState(3);
-        setFormat(index, length, singleLineCommentRule.format);
-        index = singleLineCommentexpression.indexIn(text, index + length);
+
+      if(format(index)!= quotationRule.format){
+          setFormat(index, length, singleLineCommentRule.format);
+        }
+          index = singleLineCommentexpression.indexIn(text, index + length);
     }
 }
+  out<<"previous block state 1.  "<< previousBlockState()<<endl;
+  out<<"Current block state 1.  "<< currentBlockState()<<endl;
    if(currentBlockState()!= 3)
    {
-       setCurrentBlockState(0);
+      // setCurrentBlockState(0);
 
     int startIndex = 0;
     if (previousBlockState() != 1)
@@ -287,7 +269,7 @@ foreach (const HighlightingRule &rule, highlightingRules) {
         int endIndex = commentEndExpression.indexIn(text, startIndex);
         int commentLength;
         if (endIndex == -1) {
-            setCurrentBlockState(1);
+        //    setCurrentBlockState(1);
             commentLength = text.length() - startIndex;
         } else {
             commentLength = endIndex - startIndex
@@ -297,6 +279,13 @@ foreach (const HighlightingRule &rule, highlightingRules) {
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
 }
+  setCurrentBlockState(2);
+
+   out<<"previous block state 2. "<< previousBlockState()<<endl;
+   setCurrentBlockState(3);
+
+   out<<"Current block state 2. "<< currentBlockState()<<endl;
+
     //String highlight
         QRegExp quotationexpression(quotationRule.pattern);
     index = quotationexpression.indexIn(text);
@@ -306,4 +295,93 @@ foreach (const HighlightingRule &rule, highlightingRules) {
         setFormat(index, length, quotationRule.format);
         index = quotationexpression.indexIn(text, index + length);
     }
+
+        out<<"text :"<< text<<endl;
+}
+
+*/
+void MySyntaxHighlighter::highlightBlock(const QString &text)
+{
+
+
+    int index = 0;
+   //setCurrentBlockUserData("IN");
+    out<<currentBlockUserData();
+
+    foreach (const HighlightingRule &rule, highlightingRules) {
+        QRegExp expression(rule.pattern);
+        int index = expression.indexIn(text);
+        while (index >= 0) {
+           // out<< "datatypes !!" <<endl;
+
+            int length = expression.matchedLength();
+            setFormat(index, length, rule.format);
+            index = expression.indexIn(text, index + length);
+        }
+    }
+
+
+   QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
+    index = singleLineCommentexpression.indexIn(text);
+    while (index >= 0) {
+        int length = singleLineCommentexpression.matchedLength();
+
+
+         if(previousBlockState()!= INSTRING) setFormat(index, length, singleLineCommentRule.format);
+
+
+          index = singleLineCommentexpression.indexIn(text, index + length);
+          setCurrentBlockState(INSINGLECOMMENT);
+    }
+
+    QRegExp singleLineCommentexpression2("/*.**/");
+    index = singleLineCommentexpression2.indexIn(text);
+    while (index >= 0) {
+        out<<"I am in fuck place";
+        int length = singleLineCommentexpression2.matchedLength();
+
+         if(previousBlockState()!= INSTRING) setFormat(index, length, singleLineCommentRule.format);
+
+          index = singleLineCommentexpression2.indexIn(text, index + length);
+          setCurrentBlockState(INSINGLECOMMENT);
+    }
+
+    setCurrentBlockState(OUTOFCOMMENT);
+        int startIndex = 0;
+        if (previousBlockState() != INCOMMENT &&  previousBlockState()!= INSTRING )
+            startIndex = commentStartExpression.indexIn(text);
+        while (startIndex >= 0) {
+            int endIndex = commentEndExpression.indexIn(text, startIndex);
+            int commentLength;
+            if (endIndex == -1) {
+                setCurrentBlockState(INCOMMENT);
+                commentLength = text.length() - startIndex;
+            } else {
+                commentLength = endIndex - startIndex
+                                + commentEndExpression.matchedLength();
+            }
+             if(previousBlockState()!= INSTRING) setFormat(startIndex, commentLength, multiLineCommentFormat);
+            startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
+        //return;
+        }
+    if(currentBlockState() == INCOMMENT)
+        return;
+    //else setCurrentBlockState(OUTOFCOMMENT);
+
+    QRegExp quotationexpression(quotationRule.pattern);
+    index = quotationexpression.indexIn(text);
+    while (index >= 0) {
+        int length = quotationexpression.matchedLength();
+     if(previousBlockState() != INCOMMENT && previousBlockState() != INSINGLECOMMENT )
+         setFormat(index, length, quotationRule.format);
+
+        index = quotationexpression.indexIn(text, index + length);
+        setCurrentBlockState(INSTRING);
+        return;
+    }
+    setCurrentBlockState(-1);
+
+
+
+
 }

@@ -1,5 +1,6 @@
 #include <mainwindow.h>
 #include <ui_mainwindow.h>
+#include <QtWidgets>
 
 #include <iostream>
 #include <QFileDialog>
@@ -7,16 +8,26 @@
 #include <checkthread.h>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent), completer(0),
     ui(new Ui::MainWindow)
 {
 
     ui->setupUi(this);
-    mywindow = new MyWindow();
+    mywindow = new MyWindow(parent);
+
+   // completingTextEdit = new TextEdit;
+    completer = new QCompleter(this);
+    completer->setModel(modelFromFile(":/resources/keywords.txt"));
+    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setWrapAround(false);
+    mywindow->textEdit->setCompleter(completer);
+
+
      mythread = new CheckThread(mywindow);
    // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
-    mywindow->highlighter = new MySyntaxHighlighter( mywindow);
+    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
     mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
      QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
@@ -46,7 +57,7 @@ void MainWindow::on_actionNew_File_triggered()
 
 void MainWindow::on_actionOpen_file_triggered()
 {
-    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv *.svh *.sh");
+    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv");
     if(!file.isEmpty()){
         QFile sFile(file);
         if(sFile.open(QFile::ReadOnly| QFile::Text)){
@@ -63,7 +74,7 @@ void MainWindow::on_actionOpen_file_triggered()
 void MainWindow::on_actionSave_file_triggered()
 {
     if( mywindow->currentFileName=="")
-         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv *.svh *.sh");
+         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv");
 
     QFile sFile( mywindow->currentFileName);
     if(sFile.open(QFile::WriteOnly | QFile::Text))
@@ -77,7 +88,7 @@ void MainWindow::on_actionSave_file_triggered()
 }
 void MainWindow::on_actionSave_as_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv *.svh *.sh");
+    QString file = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv");
     if(!file.isEmpty())
     {
          mywindow->currentFileName = file;
@@ -133,3 +144,33 @@ void MainWindow::onTextEditChanged()
     QString s = "[a-Z]+";
     //mywindow->highlighter->setPattern(s);
 }
+
+//get keywords from file for completer
+QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly))
+        return new QStringListModel(completer);
+
+#ifndef QT_NO_CURSOR
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+#endif
+    QStringList words;
+    // QTextStream out(stdout);
+
+    while (!file.atEnd()) {
+        QByteArray line = file.readLine();
+     //  out<< line << "  "<<endl;
+        if (!line.isEmpty())
+            words << line.trimmed();
+    }
+
+
+#ifndef QT_NO_CURSOR
+    QApplication::restoreOverrideCursor();
+#endif
+    return new QStringListModel(words, completer);
+}
+
+
+

@@ -8,11 +8,13 @@
 #include <QtGui>
 #include <QLayout>
 #include <mysyntaxhighlighter.h>
+#include <textedit.h>
 class MyWindow :public QGridLayout
 {
   //  Q_OBJECT
 public:
-    MyWindow();
+    MyWindow(const QWidget *parent);
+
 public:
     QVBoxLayout *vLayout;
     QFileSystemModel *dirModel;
@@ -20,7 +22,7 @@ public:
     QFileSystemModel *fileModel;
     QString currentFileName;
     QString *currentFileContent;
-    CodeEditor *textEdit;
+    TextEdit *textEdit;
     QVector<CodeEditor> textEditAreas;
     QTextEdit *textEdit2;
     QPushButton *testButton;

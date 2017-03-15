@@ -9,4 +9,7 @@
         <file>Resources/undo.png</file>
         <file>Resources/saveas.png</file>
     </qresource>
+    <qresource prefix="/resources">
+        <file>keywords.txt</file>
+    </qresource>
 </RCC>

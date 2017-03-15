@@ -1,7 +1,7 @@
 #include "mywindow.h"
 #include <iostream>
 #include <QDir>
-MyWindow::MyWindow()
+MyWindow::MyWindow(const QWidget *parent)
 {
 
     //get current Project path
@@ -10,15 +10,17 @@ MyWindow::MyWindow()
     std::cout << sPath.toStdString();
     dirModel = new QFileSystemModel();
   //  dirModel->setFilter( QDir::Name);
-    sPath = "C:\\Users\\a.lam.tuan\\";
+    sPath = QString("C:\\Users\\a.lam.tuan\\Documents\\build-Qnotepad-Desktop_Qt_5_7_0_MSVC2015_64bit-Debug\\debug");
     dirModel->setRootPath(sPath);
     treeView = new QTreeView();
     treeView->setModel(dirModel);
-    textEdit = new CodeEditor();
-   dockWidget = new QDockWidget;
-   mainWidget = new QMainWindow();
-   filesWidget = new QMainWindow();
-   createDockWindows();
+ //   textEdit = new CodeEditor();
+    textEdit= new TextEdit();
+
+    dockWidget = new QDockWidget;
+    mainWidget = new QMainWindow();
+    filesWidget = new QMainWindow();
+    createDockWindows();
     // textEdit2 = new MyTextEdit();
 
     //QString s = "[0-9]+";

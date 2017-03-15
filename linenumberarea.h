@@ -1,12 +1,12 @@
 #ifndef LINENUMBERAREA_H
 #define LINENUMBERAREA_H
-#include<codeedit.h>
+#include<textedit.h>
 #include<QWidget>
 
 class LineNumberArea : public QWidget
 {
 public:
-    LineNumberArea(CodeEditor *editor) : QWidget(editor) {
+    LineNumberArea(TextEdit *editor) : QWidget(editor) {
         codeEditor = editor;
     }
 
@@ -20,6 +20,6 @@ protected:
     }
 
 private:
-    CodeEditor *codeEditor;
+    TextEdit *codeEditor;
 };
 #endif // LINENUMBERAREA_H

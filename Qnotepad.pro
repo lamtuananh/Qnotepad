@@ -16,23 +16,27 @@ SOURCES += main.cpp\
         mainwindow.cpp \
         mywindow.cpp \
     mysyntaxhighlighter.cpp \
-    codeedit.cpp \
+ #   codeedit.cpp \
     linenumberarea.cpp \
     myfiledialog.cpp \
    # globals.cpp
     printer.cpp \
-    checkthread.cpp
+    checkthread.cpp \
+    textedit.cpp
 
 HEADERS  += mainwindow.h \
         mywindow.h \
     mysyntaxhighlighter.h \
-    codeedit.h \
+  #  codeedit.h \
     linenumberarea.h \
     myfiledialog.h \
    # globals.h
-    checkthread.h
+    checkthread.h \
+    textedit.h
 
 FORMS    += mainwindow.ui
 
 RESOURCES += \
     appresources.qrc
+
+DISTFILES +=
