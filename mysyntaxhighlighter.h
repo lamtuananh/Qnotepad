@@ -3,22 +3,31 @@
 
 #include <QSyntaxHighlighter>
 #include <QVector>
+#include <textedit.h>
 class MySyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
     public:
-    MySyntaxHighlighter(QObject *parent = 0);
+    MySyntaxHighlighter(TextEdit *parent = 0);
  //   void highlightBlock(const QString &text);
 
 protected:
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
-  //  void rehighlight() Q_DECL_OVERRIDE;
-   // void rehighlightBlock(const QTextBlock &block) Q_DECL_OVERRIDE;
 private :
+    TextEdit *textEdit;
+
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
     QVector<QString> datatypes;
+
+    QVector<QString> variableNames;
+    QVector<QString> classNames;
+    QVector<QString> moduleNames;
+    QVector<QString> functionNames;
+    //QVector<QString> variableNames;
+
+
 
 
     QString modulePattern;
@@ -50,7 +59,8 @@ private :
         HighlightingRule initVariableRule;
         HighlightingRule variableRule;
 
-
+        QTextCharFormat operatorFormat;
+        HighlightingRule operatorRule;
 
         QTextCharFormat classFormat;
         HighlightingRule classRule;
