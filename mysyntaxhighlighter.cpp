@@ -7,6 +7,8 @@
 #include <QTextStream>
 #include <QDir>
 #include "checkthread.h"
+#include <algorithm>
+#include <QtAlgorithms>
 //inicialization fonts
 
 //static const QFont TEXTFONT = QFont("Courier",12);
@@ -66,7 +68,8 @@ MySyntaxHighlighter::MySyntaxHighlighter(TextEdit *parent) : QSyntaxHighlighter(
    while (!line.isNull()) {
        // CheckThread::listWords.append(line);
         keywordPatterns.append("\\b"+line+"\\b");
-              line = in.readLine();
+        keywords.append(line);
+        line = in.readLine();
           }
 
        foreach (const QString &pattern, keywordPatterns) {
@@ -86,7 +89,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(TextEdit *parent) : QSyntaxHighlighter(
        initVariableRule.pattern = QRegExp("\\b(input\\s+|output\\s+)?(input|output|wire|supply0|supply1|wand|trior|wor|shortint|int|longint|byte|bit|logic|reg|integer|time)\\s+[_a-zA-Z0-9$]+\s\*(\\[[0-9]\*:[0-9]\*\\])?\\s\*(,\\s\*[_a-zA-Z0-9$]+\\s\*\s\*(\\[[0-9]\*:[0-9]\*\\])?\\s\*)\*;");       
        initVariableRule.format = variableFormat;
 
-       variableRule.pattern = QRegExp("\\b[_a-zA-Z]+\\b");
+       variableRule.pattern = QRegExp("[_a-zA-Z]+");
        variableRule.format = variableFormat;
 
   /*     classFormat.setFontWeight(QFont::Bold);
@@ -337,7 +340,7 @@ foreach (const HighlightingRule &rule, highlightingRules) {
 QString getText(const QString &text, int from, int to)
 {
     int length = text.length();
-    if(to>from && to<length)
+    if(to>from && to<=length)
     return text.left(to).right(to-from);//.right(from-to);
     else return "";
 }
@@ -391,36 +394,43 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         for(int i = index; i<text.length();i++)
         {
             if(text.at(i)==';') {
-                out<<"asdfadfasdfdaaaaaaaaaaa";
+      //          out<<"asdfadfasdfdaaaaaaaaaaa";
                 indexOfSemicolon = i;
                 break;
             }
         }
-     QString workingText = text;
+     QString workingText = getText(text,index,text.length());
         if(indexOfSemicolon != -1)
      {
          workingText =getText(text,index,indexOfSemicolon);
-         out<<"working text:" << workingText<<" index "<<index<<" index of ; "<<indexOfSemicolon<<endl;
         }
+ /*      out<<"length text:" <<text.length()<<endl;
+        out<<"working text:" << workingText<<" index "<<index<<" index of ; "<<indexOfSemicolon<<endl;
+*/
         int length = initVariableExpression.matchedLength();
     int affterDatatypeIndex = index+datatype.length();
 //    QString pom = text.right(text.length() - affterDatatypeIndex-1).left(length+1);
-    QString pom = workingText.right(workingText.length() - affterDatatypeIndex);
+    QString pom = workingText.right(workingText.length() - datatype.length());
     out<< workingText.length() - affterDatatypeIndex <<endl;
 
     QRegExp variableExpression(variableRule.pattern);
     int varindex = variableExpression.indexIn(pom);
-    out<<"pom: "<<pom<<endl;
+  /*  out<<"pom: "<<pom<<endl;
     out<< "affter datatype index: "<<affterDatatypeIndex <<endl;
+   */
     while(varindex>=0)
     {
         int varlength = variableExpression.matchedLength();
-        out<< "variable index: "<<varindex <<endl;
+   /*     out<< "variable index: "<<varindex <<endl;
         out<< "variable length: "<<varlength <<endl;
         out<< "variable name: " <<pom.right(pom.length()-varindex).left(varlength)<<endl;
-
-        setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
-
+     */   QString varName = pom.right(pom.length()-varindex).left(varlength);
+        if(std::find(keywords.begin(),keywords.end(),varName) == keywords.end())
+        {
+            if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
+            variableNames.append(varName);
+            setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
+        }
         boolean isFinish = false; // check semicolon char
      //   out<< affterDatatypeIndex << " " << pom.length() << " " << text.length()<<endl;
     /*    for(int i = affterDatatypeIndex-1;i<affterDatatypeIndex+pom.length()-1;i++)
@@ -430,8 +440,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         }*/
         if(isFinish) break;
         varindex = variableExpression.indexIn(pom, varindex+varlength);
-
-
     }
  //   setFormat(index, length, initVariableRule.format);
     index = initVariableExpression.indexIn(text, index + length);
@@ -479,6 +487,9 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
 
    //         out<<"check point 4" << endl;
         }
+        out<<"Variable names "<<endl;
+        for(QString var:variableNames)
+            out<<var<<" ";
 
 }
 

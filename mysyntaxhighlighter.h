@@ -20,6 +20,7 @@ private :
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
     QVector<QString> datatypes;
+    QVector<QString> keywords;
 
     QVector<QString> variableNames;
     QVector<QString> classNames;

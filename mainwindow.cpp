@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
     mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
-    mywindow->highlighter->setDocument( mywindow->textEdit->document());
+    //mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
      QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
      QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
@@ -38,10 +38,10 @@ void MainWindow::onTestButtonClicked()
 {
 
    // CheckThread *mythread = new CheckThread();
-    mythread->start();
+   // mythread->start();
     //mythread.start();
- //   mywindow->highlighter = new MySyntaxHighlighter( mywindow);
- //   mywindow->highlighter->setDocument( mywindow->textEdit->document());
+    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
+    mywindow->highlighter->setDocument( mywindow->textEdit->document());
 }
 
 MainWindow::~MainWindow()

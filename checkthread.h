@@ -11,22 +11,13 @@ class CheckThread : public QThread
 {
     Q_OBJECT
 public:
-     CheckThread(MyWindow *parent=0);
+     CheckThread(const MyWindow *parent=0);
     static QVector<QString> listWords;
-    MyWindow *mywindow;
+    const MyWindow *mywindow;
     MySyntaxHighlighter *hightlighter;
-    void run() override{
-        int i=0;
-        QTextStream out(stdout);
-       // hightlighter = new MySyntaxHighlighter( mywindow);
-       // hightlighter->setDocument( mywindow->textEdit->document());
-        while(true)
-        {
-            sleep(10);
-            out<<"text "<<i++<<endl;
-             out  << mywindow->textEdit->toPlainText()<<endl;
-        }
-    }
+    void run() override;
+
+
 public
 
 
