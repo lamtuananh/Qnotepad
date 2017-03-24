@@ -8,14 +8,14 @@ class MySyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
     public:
-    MySyntaxHighlighter(TextEdit *parent = 0);
+     MySyntaxHighlighter(QTextDocument *parent = 0);
+   // MySyntaxHighlighter(TextEdit *parent = 0);
  //   void highlightBlock(const QString &text);
 
 protected:
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 private :
-    TextEdit *textEdit;
-
+  //  TextEdit *textEdit;
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
@@ -106,10 +106,6 @@ private :
         QTextCharFormat beginEnd;
 
 
-
-
-signals:
-public slots:
 
 };
 

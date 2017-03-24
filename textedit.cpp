@@ -37,7 +37,8 @@ TextEdit::TextEdit(QWidget *parent)
     highlightCurrentLine();
 
 
-
+  //  connect(this,SINGAL(textChanged()),this,SLOT(checkTextDocumentChanged());
+ //   connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(setHightlighter());
 
 //    QTextStream out(stdout);
 //    out<< "I am herer";
@@ -51,7 +52,16 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
 }
+/*
+void TextEdit::setHighlighter()
+{
+   // MySyntaxHighlighter *highlighter;
+   // highlighter = new MySyntaxHighlighter(this);
+   // highlighter.setDocument(this->document());
+    highlighter = new Highlighter(editor->document());
 
+}
+*/
 void TextEdit::setCompleter(QCompleter *completer)
 {
     if (c)
@@ -222,3 +232,24 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
          ++blockNumber;
      }
  }
+/*
+QString lastDocument = "";
+bool textEditDocumentChanged()
+{
+    QString document = ;
+    if(lastDocument.length() != document.length())
+    {
+        lastDocument = document;
+        return true;
+    }
+    return false;
+}
+void TextEdit::checkTextDocumentChanged()
+{
+    if(textEditDocumentChanged())
+        emit textDocumentChanged();
+}
+*/
+
+
+

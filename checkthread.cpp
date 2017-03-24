@@ -12,8 +12,8 @@ void CheckThread ::run()
 {
     int i=0;
     QTextStream out(stdout);
-    hightlighter=new MySyntaxHighlighter( mywindow->textEdit);
-    hightlighter->setDocument(mywindow->textEdit->document());
+  //  hightlighter=new MySyntaxHighlighter( mywindow->textEdit);
+  //  hightlighter->setDocument(mywindow->textEdit->document());
 
     while(true)
     {

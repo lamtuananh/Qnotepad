@@ -14,7 +14,7 @@ public:
      CheckThread(const MyWindow *parent=0);
     static QVector<QString> listWords;
     const MyWindow *mywindow;
-    MySyntaxHighlighter *hightlighter;
+  //  MySyntaxHighlighter *hightlighter;
     void run() override;
 
 

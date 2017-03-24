@@ -5,6 +5,7 @@
 #include <QPlainTextEdit>
 #include<QPainter>
 #include<QTextBlock>
+#include <mysyntaxhighlighter.h>
 class QCompleter;
 
 class TextEdit : public QPlainTextEdit
@@ -25,6 +26,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+//    MySyntaxHighlighter * highlighter;
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;
@@ -47,7 +49,12 @@ private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
-
+//    void checkTextDocumentChanged();
+ //   void setHighlighter();
+//signals:
+    //void textChanged();
+    //bool textEditDocumentChanged();
+   // void textDocumentChanged();
 
 private:
     QString textUnderCursor() const;
@@ -55,6 +62,7 @@ private:
     QWidget *lineNumberArea; // count line variable
 
 private:
+
     QCompleter *c;
 };
 

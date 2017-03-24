@@ -22,7 +22,9 @@ int countQuotion = 0;
 
 QTextStream out(stdout);
 
-MySyntaxHighlighter::MySyntaxHighlighter(TextEdit *parent) : QSyntaxHighlighter(parent),textEdit(parent)
+//MySyntaxHighlighter::MySyntaxHighlighter(TextEdit *parent) : QSyntaxHighlighter(parent),textEdit(parent)
+MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
+    : QSyntaxHighlighter(parent)
 {
    datatypes.append("input");
    datatypes.append("output");

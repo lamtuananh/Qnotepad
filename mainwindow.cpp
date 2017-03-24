@@ -1,7 +1,7 @@
 #include <mainwindow.h>
 #include <ui_mainwindow.h>
 #include <QtWidgets>
-
+#include<QTextStream>
 #include <iostream>
 #include <QFileDialog>
 #include <QDirModel>
@@ -27,21 +27,23 @@ MainWindow::MainWindow(QWidget *parent) :
      mythread = new CheckThread(mywindow);
    // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
-    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
+ //   mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
     //mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-     QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
-     QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
+  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
+
+     QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(onTestButtonClicked()));
 
 }
 void MainWindow::onTestButtonClicked()
 {
+    QTextStream out(stdout);
+    out<<"adfasdf";
 
-   // CheckThread *mythread = new CheckThread();
-   // mythread->start();
-    //mythread.start();
-    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
+    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit->document());
     mywindow->highlighter->setDocument( mywindow->textEdit->document());
+//delete(a);
 }
 
 MainWindow::~MainWindow()
