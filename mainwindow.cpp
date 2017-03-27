@@ -30,20 +30,17 @@ MainWindow::MainWindow(QWidget *parent) :
  //   mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
     //mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(onTestButtonClicked()));
+  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(resetHighlighter()));
   //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
 
-     QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(onTestButtonClicked()));
-
-}
-void MainWindow::onTestButtonClicked()
-{
-    QTextStream out(stdout);
-    out<<"adfasdf";
-
+     QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(resetHighlighter()));
     mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit->document());
+  //  mywindow->highlighter->setDocument( mywindow->textEdit->document());
+}
+void MainWindow::resetHighlighter()
+{
+    mywindow->highlighter->reset();
     mywindow->highlighter->setDocument( mywindow->textEdit->document());
-//delete(a);
 }
 
 MainWindow::~MainWindow()

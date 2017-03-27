@@ -23,21 +23,25 @@ public:
     QString currentFileName;
     QString *currentFileContent;
     TextEdit *textEdit;
+    MySyntaxHighlighter *highlighter;
+
     QVector<CodeEditor> textEditAreas;
     QTextEdit *textEdit2;
     QPushButton *testButton;
-    MySyntaxHighlighter *highlighter;
+    //MySyntaxHighlighter *highlighter;
     QMainWindow *mainWidget,*filesWidget;
     QDockWidget *dockWidget;
     QTextEdit *textEdit3;
-       QListWidget *customerList;
-       QListWidget *paragraphsList;
+    QListWidget *customerList;
+    QListWidget *paragraphsList;
     void createDockWindows();
   //  MainWindow *mainWindow;
     /*
 public slots:
     void onTestButtonClicked();
 */
+public slots:
+    void setHighlighter();
 };
 
 #endif // MYWINDOW_H

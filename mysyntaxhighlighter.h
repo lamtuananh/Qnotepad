@@ -105,8 +105,8 @@ private :
         QTextCharFormat beginStart;
         QTextCharFormat beginEnd;
 
-
-
+public:
+void reset();
 };
 
 #endif // MYSYNTAXHIGHLIGHTER_H

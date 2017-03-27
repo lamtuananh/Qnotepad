@@ -426,7 +426,8 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
    /*     out<< "variable index: "<<varindex <<endl;
         out<< "variable length: "<<varlength <<endl;
         out<< "variable name: " <<pom.right(pom.length()-varindex).left(varlength)<<endl;
-     */   QString varName = pom.right(pom.length()-varindex).left(varlength);
+     */
+        QString varName = pom.right(pom.length()-varindex).left(varlength);
         if(std::find(keywords.begin(),keywords.end(),varName) == keywords.end())
         {
             if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
@@ -493,5 +494,11 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         for(QString var:variableNames)
             out<<var<<" ";
 
+}
+
+void MySyntaxHighlighter::reset()
+{
+    out<<"removing all variables "<<endl;
+    variableNames.clear();
 }
 

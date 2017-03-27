@@ -52,7 +52,7 @@ private slots:
 
     void onTextEditChanged();
 
-    void onTestButtonClicked();
+    void resetHighlighter();
 
 public:
     Ui::MainWindow *ui;

@@ -70,3 +70,9 @@ void MyWindow::onTestButtonClicked()
     highlighter->setDocument(textEdit->document());
 }
 */
+void MyWindow::setHighlighter()
+{
+    MySyntaxHighlighter *highlighter;
+    highlighter = new MySyntaxHighlighter(this->textEdit->document());
+    highlighter->setDocument(this->textEdit->document());
+}
