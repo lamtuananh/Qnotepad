@@ -3,7 +3,7 @@
 
 #include <QSyntaxHighlighter>
 #include <QVector>
-#include <textedit.h>
+//#include <textedit.h>
 class MySyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -14,7 +14,7 @@ class MySyntaxHighlighter : public QSyntaxHighlighter
 
 protected:
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
-private :
+public :
   //  TextEdit *textEdit;
     QMap<QString,QFont> mapFont;
     QMap<QString,QString> mapPattern;

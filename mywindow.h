@@ -9,6 +9,7 @@
 #include <QLayout>
 #include <mysyntaxhighlighter.h>
 #include <textedit.h>
+#include <QCompleter>
 class MyWindow :public QGridLayout
 {
   //  Q_OBJECT
@@ -22,26 +23,33 @@ public:
     QFileSystemModel *fileModel;
     QString currentFileName;
     QString *currentFileContent;
-    TextEdit *textEdit;
-    MySyntaxHighlighter *highlighter;
+//    TextEdit *textEdit;
+//    MySyntaxHighlighter *highlighter;
 
-    QVector<CodeEditor> textEditAreas;
-    QTextEdit *textEdit2;
-    QPushButton *testButton;
-    //MySyntaxHighlighter *highlighter;
+    struct EditorComponent{
+        TextEdit *textEdit;
+        MySyntaxHighlighter *highlighter;
+    };
+    EditorComponent *editor;
+
     QMainWindow *mainWidget,*filesWidget;
     QDockWidget *dockWidget;
-    QTextEdit *textEdit3;
     QListWidget *customerList;
     QListWidget *paragraphsList;
     void createDockWindows();
-  //  MainWindow *mainWindow;
-    /*
-public slots:
-    void onTestButtonClicked();
-*/
+
+    QAbstractItemModel *modelFromFile(const QString& fileName);
+
 public slots:
     void setHighlighter();
+    void resetCompleter();
+signals:
+    void activateUpdateCompleter();
+
+private:
+    QStringList words;
+    QCompleter *completer;
+
 };
 
 #endif // MYWINDOW_H

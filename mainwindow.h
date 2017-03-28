@@ -64,8 +64,8 @@ public:
 
 private:
 
-    QAbstractItemModel *modelFromFile(const QString& fileName);
-    QCompleter *completer;
+  //  QAbstractItemModel *modelFromFile(const QString& fileName);
+  //  QCompleter *completer;
 
 };
 

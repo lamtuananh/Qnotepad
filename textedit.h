@@ -49,10 +49,13 @@ private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
+
+
 //    void checkTextDocumentChanged();
- //   void setHighlighter();
-//signals:
-    //void textChanged();
+ public slots:
+    void resetHighlighter();
+signals:
+    void activateResetHighlighter();
     //bool textEditDocumentChanged();
    // void textDocumentChanged();
 
@@ -64,6 +67,8 @@ private:
 private:
 
     QCompleter *c;
+public:
+    MySyntaxHighlighter *highlighter;
 };
 
 #endif // TEXTEDIT_H

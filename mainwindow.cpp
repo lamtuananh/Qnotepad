@@ -8,7 +8,7 @@
 #include <checkthread.h>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), completer(0),
+    QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
 
@@ -16,31 +16,33 @@ MainWindow::MainWindow(QWidget *parent) :
     mywindow = new MyWindow(parent);
 
    // completingTextEdit = new TextEdit;
-    completer = new QCompleter(this);
+/*    completer = new QCompleter(this);
     completer->setModel(modelFromFile(":/resources/keywords.txt"));
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
-    mywindow->textEdit->setCompleter(completer);
+    mywindow->editor->textEdit->setCompleter(completer);
 
-
+*/
      mythread = new CheckThread(mywindow);
    // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
  //   mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
     //mywindow->highlighter->setDocument( mywindow->textEdit->document());
    // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(resetHighlighter()));
+   //  QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(resetHighlighter()));
   //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
 
-     QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(resetHighlighter()));
-    mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit->document());
+  //   QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(resetHighlighter()));
+  //  mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit->document());
   //  mywindow->highlighter->setDocument( mywindow->textEdit->document());
+    mythread->start();
 }
 void MainWindow::resetHighlighter()
 {
-    mywindow->highlighter->reset();
-    mywindow->highlighter->setDocument( mywindow->textEdit->document());
+   // mythread->start();
+//    mywindow->highlighter->reset();
+//    mywindow->highlighter->setDocument( mywindow->editor->textEdit->document());
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +53,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionNew_File_triggered()
 {
     mywindow->currentFileName = "";
-    mywindow->textEdit->setPlainText("");
+    mywindow->editor->textEdit->setPlainText("");
 }
 
 void MainWindow::on_actionOpen_file_triggered()
@@ -65,7 +67,7 @@ void MainWindow::on_actionOpen_file_triggered()
             QString text = in.readAll();
             sFile.close();
 
-            mywindow->textEdit->setPlainText(text);
+            mywindow->editor->textEdit->setPlainText(text);
         }
     }
 }
@@ -97,22 +99,22 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionCopy_triggered()
 {
-    mywindow->textEdit->copy();
+    mywindow->editor->textEdit->copy();
 }
 
 void MainWindow::on_actionPaste_triggered()
 {
-    mywindow->textEdit->paste();
+    mywindow->editor->textEdit->paste();
 }
 
 void MainWindow::on_actionUndo_triggered()
 {
-    mywindow->textEdit->undo();
+    mywindow->editor->textEdit->undo();
 }
 
 void MainWindow::on_actionRedo_triggered()
 {
-    mywindow->textEdit->redo();
+    mywindow->editor->textEdit->redo();
 }
 
 /*void MainWindow::onTextEditChanged()
@@ -145,6 +147,7 @@ void MainWindow::onTextEditChanged()
 }
 
 //get keywords from file for completer
+/*
 QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName)
 {
     QFile file(fileName);
@@ -170,6 +173,6 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName)
 #endif
     return new QStringListModel(words, completer);
 }
-
+*/
 
 

@@ -21,11 +21,14 @@ int countQuotion = 0;
 
 
 QTextStream out(stdout);
+QVector<QString> currentBlockVariableNames;
+
 
 //MySyntaxHighlighter::MySyntaxHighlighter(TextEdit *parent) : QSyntaxHighlighter(parent),textEdit(parent)
 MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
+
    datatypes.append("input");
    datatypes.append("output");
    datatypes.append("wire");
@@ -346,11 +349,10 @@ QString getText(const QString &text, int from, int to)
     return text.left(to).right(to-from);//.right(from-to);
     else return "";
 }
-
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
     int textLength = text.length();
-    out<<"hight light block text "<<text<<endl;
+ //   out<<"hight light block text "<<text<<endl;
     if(text == "") countQuotion = 0;
     int index = 0;
     foreach (const HighlightingRule &rule, highlightingRules) {
@@ -490,14 +492,15 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
 
    //         out<<"check point 4" << endl;
         }
-        out<<"Variable names "<<endl;
+  /*      out<<"Variable names "<<endl;
         for(QString var:variableNames)
             out<<var<<" ";
-
+*/
 }
 
 void MySyntaxHighlighter::reset()
 {
+    currentBlockVariableNames.clear();
     out<<"removing all variables "<<endl;
     variableNames.clear();
 }

@@ -11,9 +11,9 @@ class CheckThread : public QThread
 {
     Q_OBJECT
 public:
-     CheckThread(const MyWindow *parent=0);
+     CheckThread( MyWindow *parent=0);
     static QVector<QString> listWords;
-    const MyWindow *mywindow;
+     MyWindow *mywindow;
   //  MySyntaxHighlighter *hightlighter;
     void run() override;
 

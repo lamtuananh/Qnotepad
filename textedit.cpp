@@ -52,16 +52,17 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
 }
-/*
-void TextEdit::setHighlighter()
+
+void TextEdit::resetHighlighter()
 {
    // MySyntaxHighlighter *highlighter;
    // highlighter = new MySyntaxHighlighter(this);
    // highlighter.setDocument(this->document());
-    highlighter = new Highlighter(editor->document());
-
+//    highlighter = new Highlighter(editor->document());
+    highlighter->reset();
+    highlighter->setDocument(this->document());
 }
-*/
+
 void TextEdit::setCompleter(QCompleter *completer)
 {
     if (c)
