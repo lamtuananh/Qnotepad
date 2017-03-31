@@ -20,9 +20,11 @@ public :
     QMap<QString,QString> mapPattern;
     QVector<QString> vector;
     QVector<QString> datatypes;
-    QVector<QString> keywords;
+//    QVector<QString> keywords;
+    QStringList keywords;
+    QStringList variableNames;
+//    QVector<QString> variableNames;
 
-    QVector<QString> variableNames;
     QVector<QString> classNames;
     QVector<QString> moduleNames;
     QVector<QString> functionNames;

@@ -11,39 +11,18 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
     mywindow = new MyWindow(parent);
-
-   // completingTextEdit = new TextEdit;
-/*    completer = new QCompleter(this);
-    completer->setModel(modelFromFile(":/resources/keywords.txt"));
-    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-    completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setWrapAround(false);
-    mywindow->editor->textEdit->setCompleter(completer);
-
-*/
-     mythread = new CheckThread(mywindow);
-   // ui->setupUi(mywindow);
     ui->centralWidget->setLayout(mywindow);
- //   mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit);
-    //mywindow->highlighter->setDocument( mywindow->textEdit->document());
-   // QObject::connect(mywindow->textEdit,SIGNAL(textChanged()),this,SLOT(onTextEditChanged()));
-   //  QObject::connect(mywindow->testButton,SIGNAL(clicked()),this,SLOT(resetHighlighter()));
-  //   QObject::connect(mywindow->testButton,SIGNAL(clicked()),mythread,SLOT(getListWords()));
-
-  //   QObject::connect(mywindow->textEdit,SIGNAL(cursorPositionChanged()),this,SLOT(resetHighlighter()));
-  //  mywindow->highlighter = new MySyntaxHighlighter( mywindow->textEdit->document());
-  //  mywindow->highlighter->setDocument( mywindow->textEdit->document());
+    mythread = new CheckThread(mywindow);
     mythread->start();
 }
-void MainWindow::resetHighlighter()
-{
+//void MainWindow::resetHighlighter()
+//{
    // mythread->start();
 //    mywindow->highlighter->reset();
 //    mywindow->highlighter->setDocument( mywindow->editor->textEdit->document());
-}
+//}
 
 MainWindow::~MainWindow()
 {

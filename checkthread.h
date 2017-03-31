@@ -4,8 +4,8 @@
 #include <iostream>
 #include <QTextStream>
 #include <QVector>
-#include <mywindow.h>
 #include <mysyntaxhighlighter.h>
+#include <mywindow.h>
 
 class CheckThread : public QThread
 {

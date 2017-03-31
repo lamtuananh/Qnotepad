@@ -82,12 +82,16 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
            rule.format = keywordFormat;
            highlightingRules.append(rule);
        }
+       QTextCharFormat datatypeFormat;
+       normalFont.setBold(true);
+       datatypeFormat.setFont(normalFont);
+       datatypeFormat.setForeground(Qt::darkBlue);
        foreach (const QString &pattern, datatypes) {
            rule.pattern = QRegExp(pattern);
-           rule.format = keywordFormat;
+           rule.format = datatypeFormat;
            highlightingRules.append(rule);
        }
-       errorFont.setBold(true);
+       errorFont.setBold(false);
        errorFont.setItalic(true);
        variableFormat.setFont(errorFont);
        variableFormat.setForeground(Qt::red);
@@ -96,7 +100,6 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
 
        variableRule.pattern = QRegExp("[_a-zA-Z]+");
        variableRule.format = variableFormat;
-
   /*     classFormat.setFontWeight(QFont::Bold);
        classFormat.setForeground(Qt::darkMagenta);
        classRule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
@@ -143,7 +146,8 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
        quotationFormat.setForeground(Qt::darkRed);
        quotationRule.pattern = QRegExp("\".*\"");
        quotationRule.format = quotationFormat;
-       highlightingRules.append(quotationRule);
+       highlightingRules.append(quotationRule)
+               ;
 
        //Number format
        numberFormat.setForeground(Qt::black);
@@ -162,17 +166,6 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
        identifierRule.pattern = QRegExp("[_a-zA-Z][_a-zA-Z0-9]{0,30}");
        identifierRule.format = keywordFormat;
 
-    //  highlightingRules.append(identifierRule);
-
-       //blank characters format
-   //    blankFormat.setForeground(Qt::green);
-  //     blankFormat.setFontWeight(QFont::Bold);
-  //     blankRule.pattern = QRegExp("[a-zA-Z0-9+-*/,./_]+");
-   //    blankRule.pattern = QRegExp("/^$|\s+/");
-
-
-  //     blankRule.format = defaultFormat;
-    //   highlightingRules.append(blankRule);
 
        // function name format
        functionNameFormat.setFontItalic(true);
@@ -351,8 +344,7 @@ QString getText(const QString &text, int from, int to)
 }
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
-    int textLength = text.length();
- //   out<<"hight light block text "<<text<<endl;
+  //  int textLength = text.length();
     if(text == "") countQuotion = 0;
     int index = 0;
     foreach (const HighlightingRule &rule, highlightingRules) {
@@ -366,39 +358,16 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
     }
 
 
-  /*  QRegExp initVariableExpression(initVariableRule.pattern);
-    index = initVariableExpression.indexIn(text);
-    while (index >= 0) {
-    int length = initVariableExpression.matchedLength();
-    QString pom = text.right(text.length() - index).left(length);
-    QRegExp variableExpression(variableRule.pattern);
-    int varindex = variableExpression.indexIn(pom);
-    //out<<"pom: "<<pom<<endl;
-    while(varindex>=0)
-    {
-        int varlength = variableExpression.matchedLength();
-        out<< "variable index: "<<varindex <<endl;
-        out<< "variable length: "<<varlength <<endl;
-        setFormat(varindex,varlength,variableRule.format);
-        varindex = variableExpression.indexIn(pom, varindex+varlength);
-    }
- //   setFormat(index, length, initVariableRule.format);
-    index = initVariableExpression.indexIn(text, index + length);
-}
-*/
-
 
     foreach (const QString &datatype, datatypes) {
     int index = -1;
-    QRegExp initVariableExpression("\\b"+datatype+"\\b");
+    QRegExp initVariableExpression=QRegExp("\\b"+datatype+"\\b");
     index = initVariableExpression.indexIn(text);
-   // out<<datatype<< "index: "<<index <<endl;
     while (index >= 0) {
         int indexOfSemicolon=-1;
         for(int i = index; i<text.length();i++)
         {
             if(text.at(i)==';') {
-      //          out<<"asdfadfasdfdaaaaaaaaaaa";
                 indexOfSemicolon = i;
                 break;
             }
@@ -408,49 +377,41 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
      {
          workingText =getText(text,index,indexOfSemicolon);
         }
- /*      out<<"length text:" <<text.length()<<endl;
-        out<<"working text:" << workingText<<" index "<<index<<" index of ; "<<indexOfSemicolon<<endl;
-*/
-        int length = initVariableExpression.matchedLength();
+       int length = initVariableExpression.matchedLength();
     int affterDatatypeIndex = index+datatype.length();
-//    QString pom = text.right(text.length() - affterDatatypeIndex-1).left(length+1);
     QString pom = workingText.right(workingText.length() - datatype.length());
     out<< workingText.length() - affterDatatypeIndex <<endl;
 
     QRegExp variableExpression(variableRule.pattern);
     int varindex = variableExpression.indexIn(pom);
-  /*  out<<"pom: "<<pom<<endl;
-    out<< "affter datatype index: "<<affterDatatypeIndex <<endl;
-   */
     while(varindex>=0)
     {
         int varlength = variableExpression.matchedLength();
-   /*     out<< "variable index: "<<varindex <<endl;
-        out<< "variable length: "<<varlength <<endl;
-        out<< "variable name: " <<pom.right(pom.length()-varindex).left(varlength)<<endl;
-     */
-        QString varName = pom.right(pom.length()-varindex).left(varlength);
+      QString varName = pom.right(pom.length()-varindex).left(varlength);
         if(std::find(keywords.begin(),keywords.end(),varName) == keywords.end())
         {
             if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
             variableNames.append(varName);
-            setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
+            //setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
         }
         boolean isFinish = false; // check semicolon char
-     //   out<< affterDatatypeIndex << " " << pom.length() << " " << text.length()<<endl;
-    /*    for(int i = affterDatatypeIndex-1;i<affterDatatypeIndex+pom.length()-1;i++)
-         {
-              //  out<< "i " << i << " text at i: " << text.at(i)<<endl;
-                if(text.at(i)== ';') isFinish = true;
-        }*/
-        if(isFinish) break;
+       if(isFinish) break;
         varindex = variableExpression.indexIn(pom, varindex+varlength);
     }
- //   setFormat(index, length, initVariableRule.format);
     index = initVariableExpression.indexIn(text, index + length);
 }
 }
+    foreach (const QString &variable, variableNames) {
 
+        QRegExp expression =QRegExp("\\b"+variable+"\\b");
+        int index = expression.indexIn(text);
+        while (index >= 0) {
+            int length = expression.matchedLength();
+              out<<"checking "<<endl;
+            setFormat(index, length, variableFormat);
+            index = expression.indexIn(text, index + length);
+        }
+    }
    QRegExp singleLineCommentexpression(singleLineCommentRule.pattern);
     index = singleLineCommentexpression.indexIn(text);
     while (index >= 0) {

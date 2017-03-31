@@ -29,7 +29,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    CheckThread *mythread;
 
 private slots:
     void on_actionNew_File_triggered();
@@ -52,12 +51,13 @@ private slots:
 
     void onTextEditChanged();
 
-    void resetHighlighter();
+   // void resetHighlighter();
 
 public:
     Ui::MainWindow *ui;
     QString *mFileName;
     MyWindow *mywindow;
+    CheckThread *mythread;
 
     //autocompleter
 

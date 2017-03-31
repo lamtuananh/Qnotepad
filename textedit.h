@@ -2,6 +2,8 @@
 #define TEXTEDIT_H
 
 //#include <QTextEdit>
+#include <QtWidgets>
+
 #include <QPlainTextEdit>
 #include<QPainter>
 #include<QTextBlock>
@@ -26,8 +28,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
-//    MySyntaxHighlighter * highlighter;
-
+    MySyntaxHighlighter * highlighter;
 protected:
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
@@ -51,11 +52,12 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
 
 
-//    void checkTextDocumentChanged();
  public slots:
     void resetHighlighter();
+    void resetCompleter();
 signals:
     void activateResetHighlighter();
+    void activateUpdateCompleter();
     //bool textEditDocumentChanged();
    // void textDocumentChanged();
 
@@ -66,9 +68,9 @@ private:
 
 private:
 
-    QCompleter *c;
+    QCompleter *c;/*
 public:
-    MySyntaxHighlighter *highlighter;
+    MySyntaxHighlighter *highlighter;*/
 };
 
 #endif // TEXTEDIT_H

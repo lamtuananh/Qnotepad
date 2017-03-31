@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <linenumberarea.h>
+#include <QTextStream>
 class QAbstractItemModel;
 class QComboBox;
 class QCompleter;
@@ -19,8 +20,7 @@ class QLineEdit;
 class QProgressBar;
 
 class TextEdit;
-
-
+boolean completerInprogress=false;
 TextEdit::TextEdit(QWidget *parent)
 : QPlainTextEdit(parent), c(0)
 
@@ -36,17 +36,6 @@ TextEdit::TextEdit(QWidget *parent)
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 
-
-  //  connect(this,SINGAL(textChanged()),this,SLOT(checkTextDocumentChanged());
- //   connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(setHightlighter());
-
-//    QTextStream out(stdout);
-//    out<< "I am herer";
- /*   setPlainText(tr("This TextEdit provides autocompletions for words that have more than"
-                    " 3 characters. You can trigger autocompletion using ") +
-                    QKeySequence("Ctrl+E").toString(QKeySequence::NativeText));
-    */
-//out<< "I am herer 2";
 }
 
 TextEdit::~TextEdit()
@@ -55,12 +44,28 @@ TextEdit::~TextEdit()
 
 void TextEdit::resetHighlighter()
 {
-   // MySyntaxHighlighter *highlighter;
-   // highlighter = new MySyntaxHighlighter(this);
-   // highlighter.setDocument(this->document());
-//    highlighter = new Highlighter(editor->document());
+
     highlighter->reset();
     highlighter->setDocument(this->document());
+
+}
+
+void TextEdit::resetCompleter()
+{
+    if(completerInprogress)return;
+    QAbstractItemModel * model;
+    QStringList words;
+    words+= highlighter->keywords;
+    words+=highlighter->variableNames;
+    model = new QStringListModel(words,c);
+    c->setModel(model);
+    if (c)
+        QObject::disconnect(c, 0, this, 0);
+    c->setWidget(this);
+    c->setCompletionMode(QCompleter::PopupCompletion);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    QObject::connect(c, SIGNAL(activated(QString)),
+                     this, SLOT(insertCompletion(QString)));
 }
 
 void TextEdit::setCompleter(QCompleter *completer)
@@ -87,6 +92,9 @@ QCompleter *TextEdit::completer() const
 
 void TextEdit::insertCompletion(const QString& completion)
 {
+    QTextStream out(stdout);
+
+    out<<"ending completer"<<endl;
     if (c->widget() != this)
         return;
     QTextCursor tc = textCursor();
@@ -106,6 +114,9 @@ QString TextEdit::textUnderCursor() const
 
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
+    QTextStream out(stdout);
+    out<<"activating completer"<<endl;
+    completerInprogress = true;
     if (c)
         c->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
@@ -114,6 +125,7 @@ void TextEdit::focusInEvent(QFocusEvent *e)
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     if (c && c->popup()->isVisible()) {
+
         // The following keys are forwarded by the completer to the widget
        switch (e->key()) {
        case Qt::Key_Enter:
@@ -134,8 +146,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
     const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
     if (!c || (ctrlOrShift && e->text().isEmpty()))
+    {
         return;
-
+}
     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
     bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
@@ -143,9 +156,16 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
                       || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
+        QTextStream out(stdout);
+
+        out<<"ending completer"<<endl;
+        completerInprogress = false;
         return;
     }
+    QTextStream out(stdout);
 
+    out<<"activating completer"<<endl;
+    completerInprogress = true;
     if (completionPrefix != c->completionPrefix()) {
         c->setCompletionPrefix(completionPrefix);
         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
@@ -251,6 +271,7 @@ void TextEdit::checkTextDocumentChanged()
         emit textDocumentChanged();
 }
 */
+
 
 
 
