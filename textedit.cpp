@@ -49,14 +49,28 @@ void TextEdit::resetHighlighter()
     highlighter->setDocument(this->document());
 
 }
-
+QString text;
+//QStringList words;
 void TextEdit::resetCompleter()
 {
     if(completerInprogress)return;
-    QAbstractItemModel * model;
+
+    QTextStream out(stdout);
+    out<<"reseting completer"<<endl;
     QStringList words;
-    words+= highlighter->keywords;
-    words+=highlighter->variableNames;
+    text= this->document()->toPlainText();
+   QRegExp expression("\\b[_a-zA-Z]+\\b");
+    int index = expression.indexIn(text);
+    while (index >= 0) {
+        int length = expression.matchedLength();
+        QString word = text.mid(index,length);
+           if(!words.contains(word))
+               words.append(word);
+        index = expression.indexIn(text, index + length);
+    }
+    QAbstractItemModel * model;
+   // words+= highlighter->keywords;
+   // words+=highlighter->variableNames;
     model = new QStringListModel(words,c);
     c->setModel(model);
     if (c)
@@ -186,7 +200,7 @@ int TextEdit::lineNumberAreaWidth()
         max /= 10;
         ++digits;
     }
-
+    digits++;
     int space = 6 + fontMetrics().width(QLatin1Char('9')) * digits ;
 
     return space;
@@ -244,7 +258,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
              QString number = QString::number(blockNumber + 1);
              painter.setPen(Qt::black);
              painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-                              Qt::AlignRight, number);
+                              Qt::AlignCenter, number);
          }
 
          block = block.next();
