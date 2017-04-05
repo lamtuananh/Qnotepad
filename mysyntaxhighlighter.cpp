@@ -57,7 +57,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     defaultFormat.setFont(normalFont);
 
     keywordFormat.setForeground(Qt::blue);
-       keywordFormat.setFontWeight(QFont::Bold);
+    keywordFormat.setFontWeight(QFont::Bold);
        QStringList keywordPatterns;
 
        QString path = QDir::currentPath() +"/keywords.txt";
@@ -70,13 +70,35 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
        }
        QTextStream in(&file);
         QString line = in.readLine();
-   while (!line.isNull()) {
-       // CheckThread::listWords.append(line);
+        while (!line.isNull()) {
         keywordPatterns.append("\\b"+line+"\\b");
         keywords.append(line);
         line = in.readLine();
           }
+      /* path=QDir::currentPath()+"/systemTaskFunction.txt";
+       QFile file2(path);
+       if (!file2.open(QIODevice::ReadOnly | QIODevice::Text))
+             {
+            std::cout<<path.toStdString();
+           std::cout<<"errow while reading file";
+           return;
+       }
 
+       QTextStream in2(&file);
+        line = in2.readLine();
+        while (!line.isNull()) {
+        systemTaskFunction.append("\\b"+line+"\\b");
+        line = in2.readLine();
+          }*/
+/*
+        systemFunctionFormat.setFontWeight(QFont::Bold);
+        systemFunctionFormat.setForeground(Qt::red);
+        foreach (const QString &pattern, systemTaskFunction) {
+            rule.pattern = QRegExp(pattern);
+            rule.format = systemFunctionFormat;
+            highlightingRules.append(rule);
+        }
+*/
        foreach (const QString &pattern, keywordPatterns) {
            rule.pattern = QRegExp(pattern);
            rule.format = keywordFormat;

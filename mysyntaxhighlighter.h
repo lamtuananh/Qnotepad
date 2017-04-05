@@ -22,6 +22,7 @@ public :
     QVector<QString> datatypes;
 //    QVector<QString> keywords;
     QStringList keywords;
+    QStringList systemTaskFunction;
     QStringList variableNames;
 //    QVector<QString> variableNames;
 
