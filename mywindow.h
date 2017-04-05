@@ -41,7 +41,7 @@ public:
 public slots:
     void setHighlighter();
     void resetCompleter();
-    void on_treeView_clicked(QModelIndex index );
+    void on_treeView_clicked(QModelIndex  );
 signals:
     void activateUpdateCompleter();
 

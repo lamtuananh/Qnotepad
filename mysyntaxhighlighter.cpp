@@ -28,7 +28,7 @@ QVector<QString> currentBlockVariableNames;
 MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
-
+QTextStream out(stdout);
    datatypes.append("input");
    datatypes.append("output");
    datatypes.append("wire");
@@ -60,12 +60,14 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     keywordFormat.setFontWeight(QFont::Bold);
        QStringList keywordPatterns;
 
-       QString path = QDir::currentPath() +"/keywords.txt";
+//       QString path = QDir::currentPath() +"/systemTaskFunction.txt";
+       QString path = ":/resources/keywords.txt";
+
        QFile file(path);
        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
              {
-            std::cout<<path.toStdString();
-           std::cout<<"errow while reading file";
+           // out<<path.toStdString();
+           out<<"errow while reading file";
            return;
        }
        QTextStream in(&file);
@@ -73,32 +75,34 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
         while (!line.isNull()) {
         keywordPatterns.append("\\b"+line+"\\b");
         keywords.append(line);
+
         line = in.readLine();
           }
-      /* path=QDir::currentPath()+"/systemTaskFunction.txt";
-       QFile file2(path);
+        file.close();
+       QString path2=":/resources/systemTaskFunction.txt";
+       QFile file2(path2);
        if (!file2.open(QIODevice::ReadOnly | QIODevice::Text))
              {
-            std::cout<<path.toStdString();
-           std::cout<<"errow while reading file";
+           out<<"errow while reading file";
            return;
        }
+       QTextStream in2(&file2);
+        QString line2 = in2.readLine();
+        while (!line2.isNull()) {
+            out<<line2;
+        systemTaskFunction.append(line2);
+        line2 = in2.readLine();
 
-       QTextStream in2(&file);
-        line = in2.readLine();
-        while (!line.isNull()) {
-        systemTaskFunction.append("\\b"+line+"\\b");
-        line = in2.readLine();
-          }*/
-/*
+        }
+        file2.close();
         systemFunctionFormat.setFontWeight(QFont::Bold);
         systemFunctionFormat.setForeground(Qt::red);
         foreach (const QString &pattern, systemTaskFunction) {
-            rule.pattern = QRegExp(pattern);
+            rule.pattern = QRegExp("\\$"+pattern+"\\b");
             rule.format = systemFunctionFormat;
             highlightingRules.append(rule);
         }
-*/
+
        foreach (const QString &pattern, keywordPatterns) {
            rule.pattern = QRegExp(pattern);
            rule.format = keywordFormat;
@@ -109,7 +113,7 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
        datatypeFormat.setFont(normalFont);
        datatypeFormat.setForeground(Qt::darkBlue);
        foreach (const QString &pattern, datatypes) {
-           rule.pattern = QRegExp(pattern);
+           rule.pattern = QRegExp("\\b"+pattern+"\\b");
            rule.format = datatypeFormat;
            highlightingRules.append(rule);
        }
@@ -148,12 +152,12 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
 
 
        //System function call
-       systemFunctionFormat.setFontWeight(QFont::Bold);
+ /*      systemFunctionFormat.setFontWeight(QFont::Bold);
        systemFunctionFormat.setForeground(Qt::red);
        systemFunctionRule.pattern = QRegExp("\\$[a-zA-Z]+\\b");
        systemFunctionRule.format = systemFunctionFormat;
        highlightingRules.append(systemFunctionRule);
-       //single line comment format
+    */   //single line comment format
         QFont font= QFont("Courier",12);
        font.setUnderline(false);
        singleLineCommentFormat.setFont(font);
@@ -378,8 +382,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
             index = expression.indexIn(text, index + length);
         }
     }
-
-
 
     foreach (const QString &datatype, datatypes) {
     int index = -1;

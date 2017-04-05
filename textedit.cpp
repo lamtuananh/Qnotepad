@@ -44,7 +44,6 @@ TextEdit::~TextEdit()
 
 void TextEdit::resetHighlighter()
 {
-
     highlighter->reset();
     highlighter->setDocument(this->document());
 
@@ -58,9 +57,11 @@ void TextEdit::resetCompleter()
     QTextStream out(stdout);
     out<<"reseting completer"<<endl;
     QStringList words;
+
     text= this->document()->toPlainText();
-   QRegExp expression("\\b[_a-zA-Z]+\\b");
+    QRegExp expression("[a-zA-Z]+");
     int index = expression.indexIn(text);
+
     while (index >= 0) {
         int length = expression.matchedLength();
         QString word = text.mid(index,length);
@@ -68,8 +69,15 @@ void TextEdit::resetCompleter()
                words.append(word);
         index = expression.indexIn(text, index + length);
     }
+    foreach(QString s ,highlighter->keywords)
+    words.append(s);
+    foreach(QString s ,highlighter->systemTaskFunction)
+    words.append("$"+s);
+    out<<" words:";
+    foreach(QString s,words)
+    out<<" "<<s;
     QAbstractItemModel * model;
-   // words+= highlighter->keywords;
+   //words+= highlighter->keywords;
    // words+=highlighter->variableNames;
     model = new QStringListModel(words,c);
     c->setModel(model);
@@ -129,16 +137,21 @@ QString TextEdit::textUnderCursor() const
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
     QTextStream out(stdout);
-    out<<"activating completer"<<endl;
-    completerInprogress = true;
+    out<<"check X"<<endl;
+   // completerInprogress = true;
     if (c)
         c->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
-{
+{QTextStream out(stdout);
+    out<<"check 0"<<endl;
+  //  if(e->key()==Qt::Key_Enter)
+  //      this->resetCompleter();
+
     if (c && c->popup()->isVisible()) {
+        completerInprogress = true;
 
         // The following keys are forwarded by the completer to the widget
        switch (e->key()) {
@@ -170,20 +183,23 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
                       || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
-        QTextStream out(stdout);
 
-        out<<"ending completer"<<endl;
+        out<<"check 1"<<endl;
         completerInprogress = false;
+       //  this->resetCompleter();
         return;
     }
-    QTextStream out(stdout);
 
-    out<<"activating completer"<<endl;
+    out<<"check 2"<<endl;
     completerInprogress = true;
     if (completionPrefix != c->completionPrefix()) {
         c->setCompletionPrefix(completionPrefix);
         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+        out<<"check 3"<<endl;
+       // completerInprogress = true;
     }
+
+
     QRect cr = cursorRect();
     cr.setWidth(c->popup()->sizeHintForColumn(0)
                 + c->popup()->verticalScrollBar()->sizeHint().width());

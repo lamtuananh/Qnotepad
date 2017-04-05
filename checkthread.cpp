@@ -7,15 +7,18 @@
 CheckThread::CheckThread( MyWindow *parent)
 {
      mywindow = parent;
-
 }
+int i = 0;
 void CheckThread ::run()
 {
     while(true)
     {
-        sleep(1);
+        i++;
+        if(i==10){
         emit mywindow->editor->textEdit->activateResetHighlighter();
+        i=0;
+        }
         sleep(1);
-        emit mywindow->editor->textEdit->activateUpdateCompleter();
+      // emit mywindow->editor->textEdit->activateUpdateCompleter();
     }
 }

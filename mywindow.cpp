@@ -13,17 +13,20 @@ MyWindow::MyWindow( QWidget *parent)
     listView = new QListView(parent);
     //get current Project path
     QString sPath;
+//    sPath = "G:/";
     sPath =QDir::currentPath();
-    std::cout << sPath.toStdString();
-    dirModel = new QFileSystemModel(filesWidget);
+  //  std::cout << sPath.toStdString();
     sPath = QString("C:\\Users\\a.lam.tuan\\Documents\\build-Qnotepad-Desktop_Qt_5_7_0_MSVC2015_64bit-Debug\\debug");
+    dirModel = new QFileSystemModel(filesWidget);
     dirModel->setRootPath(sPath);
     treeView = new QTreeView();
     treeView->setModel(dirModel);
+    sPath = "C:/";
+
     fileModel = new QFileSystemModel();
-   // fileModel->setFilter(QDir::NoDotAndDotDot | QDir::NoDotDot);
-//    sPath = "C:/Users/a.lam.tuan";
-    sPath = QString("C:/Users/a.lam.tuan/Documents/build-Qnotepad-Desktop_Qt_5_7_0_MSVC2015_64bit-Debug/debug");
+    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::NoDotDot|QDir::AllDirs);
+   // sPath = "C:/Users/a.lam.tuan";
+  //  sPath = QString("C:/Users/a.lam.tuan/Documents/build-Qnotepad-Desktop_Qt_5_7_0_MSVC2015_64bit-Debug/debug");
 
     fileModel->setRootPath(sPath);
     listView->setModel(fileModel);
@@ -39,10 +42,10 @@ MyWindow::MyWindow( QWidget *parent)
 
     createDockWindows();
     //testButton = new QPushButton("Start check !!!");
-    this->addWidget(filesWidget,0,0,4,1);
-   // this->addWidget(mainWidget,0,4,1,2);
-    this->addWidget(listView,0,6);
-    QObject::connect(treeView,SIGNAL(clicked(QModelIndex)),this, SLOT(on_treeView_clicked(QModelIndex)));
+    this->addWidget(filesWidget,0,0);
+    this->addWidget(mainWidget,0,1,1,3);
+   // this->addWidget(treeView,0,4);
+    QObject::connect(treeView,SIGNAL(clicked(QModelIndex)),this, SLOT(on_treeView_clicked(index)));
 
 
     completer = new QCompleter(this);
@@ -51,7 +54,6 @@ MyWindow::MyWindow( QWidget *parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
     editor->textEdit->setCompleter(completer);
-   // QObject::connect(this,SIGNAL(activateUpdateCompleter()),this,SLOT(resetCompleter()));
      QObject::connect(editor->textEdit,SIGNAL(activateUpdateCompleter()),editor->textEdit,SLOT(resetCompleter()));
 
 }
@@ -59,7 +61,7 @@ void MyWindow::createDockWindows()
 {
     QDockWidget *dock = new QDockWidget(tr("Project Explorer"), mainWidget);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
-    dock->setWidget(treeView);
+    dock->setWidget(listView);
     mainWidget->addDockWidget(Qt::LeftDockWidgetArea, dock);
     dock = new QDockWidget(tr("Working file"), filesWidget);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
@@ -68,23 +70,31 @@ void MyWindow::createDockWindows()
 }
 void MyWindow::on_treeView_clicked(QModelIndex index)
 {
+    QTextStream out(stdout);
     QString sPath = dirModel->fileInfo(index).absoluteFilePath();
+    out<<"sPath"<<endl;
     listView->setRootIndex(fileModel->setRootPath(sPath));
 }
 
-
+/**
+ * @brief updateWordList
+ * update words for autocompletion
+ */
 void updateWordList()
 {
-   // out<<"updating word list"<<endl;
 }
+/**
+ * @brief MyWindow::resetCompleter
+ * reset completer with new words list
+ */
 void MyWindow::resetCompleter()
 {
-  //  updateWordList();
-  //  completer->setModel(modelFromFile(":/resources/keywords.txt"));
-  //  editor->textEdit->setCompleter(completer);
 }
 
-
+/**
+ * @brief MyWindow::setHighlighter
+ * reset highlighter
+ */
 void MyWindow::setHighlighter()
 {
     MySyntaxHighlighter *highlighter;
