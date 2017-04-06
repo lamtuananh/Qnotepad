@@ -46,6 +46,8 @@ QTextStream out(stdout);
    datatypes.append("reg");
    datatypes.append("integer");
    datatypes.append("time");
+   datatypes.append("parameter");
+   datatypes.append("inout");
 
 
      HighlightingRule rule;
@@ -133,8 +135,8 @@ QTextStream out(stdout);
        highlightingRules.append(classRule);
 */
        //operatorFormat.setFontWeight(QFont::Bold);
-       operatorFormat.setForeground(Qt::red);
-       operatorRule.pattern = QRegExp("([\\*|\\+|\\-|\\/|\\%]){1}");
+       operatorFormat.setForeground(Qt::darkRed);
+       operatorRule.pattern = QRegExp("([\\*|\\+|\\-|\\/|\\%|&&|!|\\?|=|==|@]){1}");
        operatorRule.format = operatorFormat;
        highlightingRules.append(operatorRule);
 
@@ -185,6 +187,12 @@ QTextStream out(stdout);
        //Hex Number format
        hexNumberRule.pattern = QRegExp("\\b0[xX][0-9a-fA-F]+\\b");
        hexNumberRule.format = numberFormat;
+       highlightingRules.append(hexNumberRule);
+
+       //octal number
+       octalNumberRule.pattern=QRegExp("\\b[0-9]+'h[0-9]+\\b");
+       octalNumberRule.format = numberFormat;
+       highlightingRules.append(octalNumberRule);
 
        //identifier format
 
