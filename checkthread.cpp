@@ -19,6 +19,6 @@ void CheckThread ::run()
         i=0;
         }
         sleep(1);
-      // emit mywindow->editor->textEdit->activateUpdateCompleter();
+        //emit mywindow->editor->textEdit->activateUpdateCompleter();
     }
 }

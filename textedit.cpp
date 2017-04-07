@@ -26,6 +26,10 @@ TextEdit::TextEdit(QWidget *parent)
 
 //TextEdit::TextEdit()
 {
+   // wordList = new QStringList();
+    wordList.append("module");
+    wordList.append("endmodule");
+    model = new QStringListModel(wordList,c);
     setLineWrapMode(QPlainTextEdit::NoWrap);
     lineNumberArea = new LineNumberArea(this);
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -46,40 +50,52 @@ void TextEdit::resetHighlighter()
 {
     highlighter->reset();
     highlighter->setDocument(this->document());
+}
+/*
+bool isInStringList(){
+return true;
+}
+
+void updateWordList()
+{
 
 }
+*/
 QString text;
-//QStringList words;
 void TextEdit::resetCompleter()
 {
-    if(completerInprogress)return;
+   // if(completerInprogress)return;
 
     QTextStream out(stdout);
     out<<"reseting completer"<<endl;
-    QStringList words;
-
+    //QStringList words;
+    wordList.clear();
     text= this->document()->toPlainText();
-    QRegExp expression("[a-zA-Z]+");
+    QRegExp expression("\\b[a-zA-Z]+\\b");
     int index = expression.indexIn(text);
 
     while (index >= 0) {
         int length = expression.matchedLength();
         QString word = text.mid(index,length);
-           if(!words.contains(word))
-               words.append(word);
+           if(!wordList.contains(word))
+               wordList.append(word);
         index = expression.indexIn(text, index + length);
     }
+   // model->setStringList(wordList);
+   // model =  new QStringListModel(wordList,c);
+  //  c->setModel(model);
     foreach(QString s ,highlighter->keywords)
-    words.append(s);
+    if(!wordList.contains(s))wordList.append(s);
     foreach(QString s ,highlighter->systemTaskFunction)
-    words.append("$"+s);
+    if(!wordList.contains(s))wordList.append(s);
+    model->setStringList(wordList);
+
     out<<" words:";
-    foreach(QString s,words)
+    wordList.sort();
+    foreach(QString s,wordList)
     out<<" "<<s;
-    QAbstractItemModel * model;
-   //words+= highlighter->keywords;
-   // words+=highlighter->variableNames;
-    model = new QStringListModel(words,c);
+ //   QAbstractItemModel * model;
+ //   model = new QStringListModel(words,c);
     c->setModel(model);
     if (c)
         QObject::disconnect(c, 0, this, 0);
@@ -145,10 +161,11 @@ void TextEdit::focusInEvent(QFocusEvent *e)
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
-{QTextStream out(stdout);
-    out<<"check 0"<<endl;
+{
+    QTextStream out(stdout);
+    out<<"********************"<<endl;
   //  if(e->key()==Qt::Key_Enter)
-  //      this->resetCompleter();
+    //    resetCompleter();
 
     if (c && c->popup()->isVisible()) {
         completerInprogress = true;
@@ -180,23 +197,25 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
 
-    if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+    if(eow.contains(e->key())||e->key()==Qt::Key_Enter ||e->key()==Qt::Key_Space )
+    {
+        resetCompleter();
+        out<<"hello worlds"<<endl;
+    }
+        if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
                       || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
 
         out<<"check 1"<<endl;
-        completerInprogress = false;
-       //  this->resetCompleter();
-        return;
+         return;
     }
 
     out<<"check 2"<<endl;
-    completerInprogress = true;
     if (completionPrefix != c->completionPrefix()) {
         c->setCompletionPrefix(completionPrefix);
         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
         out<<"check 3"<<endl;
-       // completerInprogress = true;
+
     }
 
 

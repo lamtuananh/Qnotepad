@@ -49,7 +49,8 @@ MyWindow::MyWindow( QWidget *parent)
 
 
     completer = new QCompleter(this);
-    completer->setModel(modelFromFile(":/resources/keywords.txt"));
+//    completer->setModel(modelFromFile(":/resources/keywords.txt"));
+    completer->setModel(editor->textEdit->model);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);

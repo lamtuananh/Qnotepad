@@ -66,11 +66,11 @@ private:
 
     QWidget *lineNumberArea; // count line variable
 
-private:
-
-    QCompleter *c;/*
 public:
-    MySyntaxHighlighter *highlighter;*/
+
+    QCompleter *c;
+    QStringList wordList;
+    QStringListModel *model;
 };
 
 #endif // TEXTEDIT_H
