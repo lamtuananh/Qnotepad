@@ -29,8 +29,8 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
 QTextStream out(stdout);
-   datatypes.append("input");
-   datatypes.append("output");
+// datatypes.append("input");
+//   datatypes.append("output");
    datatypes.append("wire");
    datatypes.append("supply0");
    datatypes.append("supply1");
@@ -46,7 +46,7 @@ QTextStream out(stdout);
    datatypes.append("reg");
    datatypes.append("integer");
    datatypes.append("time");
-   datatypes.append("parameter");
+  // datatypes.append("parameter");
    datatypes.append("inout");
 
 
@@ -152,14 +152,29 @@ QTextStream out(stdout);
        defineRule.format = includeFormat;
        highlightingRules.append(defineRule);
 
+       parameterFormat.setFontWeight(QFont::Bold);
+       parameterFormat.setForeground(Qt::darkGreen);
+//       parameterRule.pattern = QRegExp("[\\n\\r].*parameter\\s*([^\\n\\r]*)");
+//       parameterRule.pattern = QRegExp("(?=(([a-zA-Z_]+)+\\sparameter))");
+       parameterRule.pattern = QRegExp("hello (?=\\s+parameter\\s+)");
+
+       parameterRule.format = parameterFormat;
+       highlightingRules.append(parameterRule);
+
+       ioFormat.setFontWeight(QFont::Bold);
+       ioFormat.setForeground(Qt::darkGreen);
+       ioRule.pattern = QRegExp("[\\n\\r].*(input|output)?\\s*([^\\n\\r]*)");
+       ioRule.format = parameterFormat;\
+       highlightingRules.append(ioRule);
 
        //System function call
- /*      systemFunctionFormat.setFontWeight(QFont::Bold);
+       systemFunctionFormat.setFontWeight(QFont::Bold);
        systemFunctionFormat.setForeground(Qt::red);
        systemFunctionRule.pattern = QRegExp("\\$[a-zA-Z]+\\b");
        systemFunctionRule.format = systemFunctionFormat;
        highlightingRules.append(systemFunctionRule);
-    */   //single line comment format
+
+       //single line comment format
         QFont font= QFont("Courier",12);
        font.setUnderline(false);
        singleLineCommentFormat.setFont(font);
@@ -489,11 +504,23 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         for(QString var:variableNames)
             out<<var<<" ";
 */
+
+
+        QRegExp expression(parameterRule.pattern);
+        out<<"xxxxxxxxxxxxxxxxxxxxxxx";
+         index = expression.indexIn(text);
+        while (index >= 0) {
+             out<<"check point 4 " << endl;
+            int length = expression.matchedLength();
+            setFormat(index, length, parameterRule.format);
+            out<<index<<" "<<length<<endl;
+            index = expression.indexIn(text, index + length);
+        }
 }
 
 void MySyntaxHighlighter::reset()
 {
-    currentBlockVariableNames.clear();
+   // currentBlockVariableNames.clear();
     out<<"removing all variables "<<endl;
     variableNames.clear();
 }

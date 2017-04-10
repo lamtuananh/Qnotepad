@@ -9,9 +9,9 @@
 #include <QAbstractItemModel>
 #include <QScrollBar>
 
-#include <iostream>
+//#include <iostream>
 #include <linenumberarea.h>
-#include <QTextStream>
+//#include <QTextStream>
 class QAbstractItemModel;
 class QComboBox;
 class QCompleter;
@@ -66,8 +66,8 @@ void TextEdit::resetCompleter()
 {
    // if(completerInprogress)return;
 
-    QTextStream out(stdout);
-    out<<"reseting completer"<<endl;
+ //   QTextStream out(stdout);
+ //   out<<"reseting completer"<<endl;
     //QStringList words;
     wordList.clear();
     text= this->document()->toPlainText();
@@ -90,10 +90,10 @@ void TextEdit::resetCompleter()
     if(!wordList.contains(s))wordList.append(s);
     model->setStringList(wordList);
 
-    out<<" words:";
+//    out<<" words:";
     wordList.sort();
-    foreach(QString s,wordList)
-    out<<" "<<s;
+  //  foreach(QString s,wordList)
+ //   out<<" "<<s;
  //   QAbstractItemModel * model;
  //   model = new QStringListModel(words,c);
     c->setModel(model);
@@ -130,9 +130,9 @@ QCompleter *TextEdit::completer() const
 
 void TextEdit::insertCompletion(const QString& completion)
 {
-    QTextStream out(stdout);
+  //  QTextStream out(stdout);
 
-    out<<"ending completer"<<endl;
+ //   out<<"ending completer"<<endl;
     if (c->widget() != this)
         return;
     QTextCursor tc = textCursor();
@@ -152,8 +152,8 @@ QString TextEdit::textUnderCursor() const
 
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
-    QTextStream out(stdout);
-    out<<"check X"<<endl;
+  //  QTextStream out(stdout);
+ //   out<<"check X"<<endl;
    // completerInprogress = true;
     if (c)
         c->setWidget(this);
@@ -162,8 +162,8 @@ void TextEdit::focusInEvent(QFocusEvent *e)
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
-    QTextStream out(stdout);
-    out<<"********************"<<endl;
+  //  QTextStream out(stdout);
+  //  out<<"********************"<<endl;
   //  if(e->key()==Qt::Key_Enter)
     //    resetCompleter();
 
@@ -200,21 +200,21 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     if(eow.contains(e->key())||e->key()==Qt::Key_Enter ||e->key()==Qt::Key_Space )
     {
         resetCompleter();
-        out<<"hello worlds"<<endl;
+    //    out<<"hello worlds"<<endl;
     }
         if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
                       || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
 
-        out<<"check 1"<<endl;
+   //     out<<"check 1"<<endl;
          return;
     }
 
-    out<<"check 2"<<endl;
+  //  out<<"check 2"<<endl;
     if (completionPrefix != c->completionPrefix()) {
         c->setCompletionPrefix(completionPrefix);
         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
-        out<<"check 3"<<endl;
+   //     out<<"check 3"<<endl;
 
     }
 

@@ -56,6 +56,13 @@ public :
         QTextCharFormat includeFormat;
         HighlightingRule includeRule;
 
+        QTextCharFormat parameterFormat;
+        HighlightingRule parameterRule;
+
+        QTextCharFormat ioFormat;
+        HighlightingRule ioRule;
+
+
         QTextCharFormat defineFormat;
         HighlightingRule defineRule;
 
