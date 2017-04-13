@@ -66,7 +66,7 @@ void TextEdit::resetCompleter()
 {
    // if(completerInprogress)return;
 
- //   QTextStream out(stdout);
+    QTextStream out(stdout);
  //   out<<"reseting completer"<<endl;
     //QStringList words;
     wordList.clear();
@@ -88,15 +88,15 @@ void TextEdit::resetCompleter()
     if(!wordList.contains(s))wordList.append(s);
     foreach(QString s ,highlighter->systemTaskFunction)
     if(!wordList.contains(s))wordList.append(s);
-    model->setStringList(wordList);
+   // model->setStringList(wordList);
 
 //    out<<" words:";
     wordList.sort();
-  //  foreach(QString s,wordList)
- //   out<<" "<<s;
+    foreach(QString s,wordList)
+    out<<" "<<s;
  //   QAbstractItemModel * model;
  //   model = new QStringListModel(words,c);
-    c->setModel(model);
+/*    c->setModel(model);
     if (c)
         QObject::disconnect(c, 0, this, 0);
     c->setWidget(this);
@@ -104,6 +104,12 @@ void TextEdit::resetCompleter()
     c->setCaseSensitivity(Qt::CaseInsensitive);
     QObject::connect(c, SIGNAL(activated(QString)),
                      this, SLOT(insertCompletion(QString)));
+
+*/
+    QStringListModel *model = (QStringListModel*)(c->model());
+        QStringList stringList;
+        stringList << "baconlon" << "conheocon" << "helloworld";
+        model->setStringList(wordList);
 }
 
 void TextEdit::setCompleter(QCompleter *completer)
