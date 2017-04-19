@@ -15,7 +15,7 @@ void CheckThread ::run()
     {
         i++;
         if(i==10){
-        emit mywindow->editor->textEdit->activateResetHighlighter();
+       // emit mywindow->editor->textEdit->activateResetHighlighter();
         i=0;
         }
         sleep(1);

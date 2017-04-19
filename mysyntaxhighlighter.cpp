@@ -285,8 +285,20 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         if(std::find(keywords.begin(),keywords.end(),varName) == keywords.end())
         {
             if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
-            variableNames.append(varName);
-            //setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
+            {
+                if(datatype.compare("parameter")==0)
+                    parameterNames.append(varName);
+                else
+                    if(datatype.compare("input")==0)
+                    inputOutputNames.append(varName);
+                    else
+                        if(datatype.compare("output")==0)
+                        inputOutputNames.append(varName);
+                        else
+                        variableNames.append(varName);
+
+            }
+                //setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
         }
         boolean isFinish = false; // check semicolon char
        if(isFinish) break;
@@ -303,6 +315,28 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
             int length = expression.matchedLength();
               out<<"checking "<<endl;
             setFormat(index, length, variableFormat);
+            index = expression.indexIn(text, index + length);
+        }
+    }
+    foreach (const QString &parameter, parameterNames) {
+
+        QRegExp expression =QRegExp("\\b"+parameter+"\\b");
+        int index = expression.indexIn(text);
+        while (index >= 0) {
+            int length = expression.matchedLength();
+              out<<"checking "<<endl;
+            setFormat(index, length, parameterFormat);
+            index = expression.indexIn(text, index + length);
+        }
+    }
+    foreach (const QString &inputoutput, inputOutputNames) {
+
+        QRegExp expression =QRegExp("\\b"+inputoutput+"\\b");
+        int index = expression.indexIn(text);
+        while (index >= 0) {
+            int length = expression.matchedLength();
+              out<<"checking "<<endl;
+            setFormat(index, length, parameterFormat);
             index = expression.indexIn(text, index + length);
         }
     }

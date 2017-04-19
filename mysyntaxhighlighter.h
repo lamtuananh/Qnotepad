@@ -23,7 +23,7 @@ public :
 //    QVector<QString> keywords;
     QStringList keywords;
     QStringList systemTaskFunction;
-    QStringList variableNames;
+    QStringList variableNames,parameterNames,inputOutputNames;
 //    QVector<QString> variableNames;
 
     QVector<QString> classNames;

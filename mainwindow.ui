@@ -47,6 +47,8 @@
     <addaction name="actionOpen_file"/>
     <addaction name="actionSave_file"/>
     <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_directory"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -154,6 +156,11 @@
   <action name="actionShowHtml">
    <property name="text">
     <string>showHtml</string>
+   </property>
+  </action>
+  <action name="actionOpen_directory">
+   <property name="text">
+    <string>Open directory</string>
    </property>
   </action>
  </widget>

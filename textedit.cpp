@@ -64,14 +64,10 @@ void updateWordList()
 QString text;
 void TextEdit::resetCompleter()
 {
-   // if(completerInprogress)return;
-
     QTextStream out(stdout);
- //   out<<"reseting completer"<<endl;
-    //QStringList words;
     wordList.clear();
     text= this->document()->toPlainText();
-    QRegExp expression("\\b[a-zA-Z]+\\b");
+    QRegExp expression("\\b[_a-zA-Z]+\\b");
     int index = expression.indexIn(text);
 
     while (index >= 0) {
@@ -81,34 +77,15 @@ void TextEdit::resetCompleter()
                wordList.append(word);
         index = expression.indexIn(text, index + length);
     }
-   // model->setStringList(wordList);
-   // model =  new QStringListModel(wordList,c);
-  //  c->setModel(model);
     foreach(QString s ,highlighter->keywords)
     if(!wordList.contains(s))wordList.append(s);
     foreach(QString s ,highlighter->systemTaskFunction)
     if(!wordList.contains(s))wordList.append(s);
-   // model->setStringList(wordList);
-
-//    out<<" words:";
     wordList.sort();
-    foreach(QString s,wordList)
-    out<<" "<<s;
- //   QAbstractItemModel * model;
- //   model = new QStringListModel(words,c);
-/*    c->setModel(model);
-    if (c)
-        QObject::disconnect(c, 0, this, 0);
-    c->setWidget(this);
-    c->setCompletionMode(QCompleter::PopupCompletion);
-    c->setCaseSensitivity(Qt::CaseInsensitive);
-    QObject::connect(c, SIGNAL(activated(QString)),
-                     this, SLOT(insertCompletion(QString)));
+//    foreach(QString s,wordList)
+//    out<<" "<<s;
 
-*/
     QStringListModel *model = (QStringListModel*)(c->model());
-        QStringList stringList;
-        stringList << "baconlon" << "conheocon" << "helloworld";
         model->setStringList(wordList);
 }
 
@@ -158,9 +135,6 @@ QString TextEdit::textUnderCursor() const
 
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
-  //  QTextStream out(stdout);
- //   out<<"check X"<<endl;
-   // completerInprogress = true;
     if (c)
         c->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
