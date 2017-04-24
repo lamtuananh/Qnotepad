@@ -29,8 +29,8 @@ MySyntaxHighlighter::MySyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
 QTextStream out(stdout);
-// datatypes.append("input");
-//   datatypes.append("output");
+   datatypes.append("input");
+   datatypes.append("output");
    datatypes.append("wire");
    datatypes.append("supply0");
    datatypes.append("supply1");
@@ -46,7 +46,7 @@ QTextStream out(stdout);
    datatypes.append("reg");
    datatypes.append("integer");
    datatypes.append("time");
-  // datatypes.append("parameter");
+   datatypes.append("parameter");
    datatypes.append("inout");
 
 
@@ -153,7 +153,8 @@ QTextStream out(stdout);
        highlightingRules.append(defineRule);
 
        parameterFormat.setFontWeight(QFont::Bold);
-       parameterFormat.setForeground(Qt::darkGreen);
+     //  parameterFormat.setFontItalic(true);
+       parameterFormat.setForeground(Qt::red);
 //       parameterRule.pattern = QRegExp("[\\n\\r].*parameter\\s*([^\\n\\r]*)");
 //       parameterRule.pattern = QRegExp("(?=(([a-zA-Z_]+)+\\sparameter))");
        parameterRule.pattern = QRegExp("hello (?=\\s+parameter\\s+)");
@@ -161,10 +162,12 @@ QTextStream out(stdout);
        parameterRule.format = parameterFormat;
        highlightingRules.append(parameterRule);
 
+
        ioFormat.setFontWeight(QFont::Bold);
-       ioFormat.setForeground(Qt::darkGreen);
+       ioFormat.setForeground(Qt::red);
+     //  ioFormat.setFontItalic(true);
        ioRule.pattern = QRegExp("[\\n\\r].*(input|output)?\\s*([^\\n\\r]*)");
-       ioRule.format = parameterFormat;\
+       ioRule.format = ioFormat;\
        highlightingRules.append(ioRule);
 
        //System function call
@@ -286,9 +289,13 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         {
             if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
             {
+                out<<"datatype is :" <<datatype<<endl;
                 if(datatype.compare("parameter")==0)
+                {
+                    out<<"Parametereererre"<<endl;
                     parameterNames.append(varName);
-                else
+                }
+                    else
                     if(datatype.compare("input")==0)
                     inputOutputNames.append(varName);
                     else
@@ -336,7 +343,7 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         while (index >= 0) {
             int length = expression.matchedLength();
               out<<"checking "<<endl;
-            setFormat(index, length, parameterFormat);
+            setFormat(index, length, ioFormat);
             index = expression.indexIn(text, index + length);
         }
     }

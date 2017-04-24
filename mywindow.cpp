@@ -42,8 +42,8 @@ MyWindow::MyWindow( QWidget *parent)
 
     createDockWindows();
     //testButton = new QPushButton("Start check !!!");
-    this->addWidget(filesWidget,0,0);
-    this->addWidget(mainWidget,0,1,1,3);
+   this->addWidget(filesWidget,0,0);
+   // this->addWidget(mainWidget,0,1,1,3);
    // this->addWidget(treeView,0,4);
     QObject::connect(treeView,SIGNAL(clicked(QModelIndex)),this, SLOT(on_treeView_clicked(index)));
 

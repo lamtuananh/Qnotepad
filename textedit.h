@@ -32,7 +32,6 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
-
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE; // count lines
 
 
@@ -48,7 +47,7 @@ private slots:
      * @param newBlockCount
      */
     void updateLineNumberAreaWidth(int newBlockCount);
-    void highlightCurrentLine();
+    void highlightLineOnCusor();
     void updateLineNumberArea(const QRect &, int);
 
 

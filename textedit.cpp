@@ -34,11 +34,11 @@ TextEdit::TextEdit(QWidget *parent)
     lineNumberArea = new LineNumberArea(this);
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightLineOnCusor()));
     QFont font = QFont("Courier",12);
     this->setFont(font);
     updateLineNumberAreaWidth(0);
-    highlightCurrentLine();
+    highlightLineOnCusor();
 
 }
 
@@ -82,9 +82,6 @@ void TextEdit::resetCompleter()
     foreach(QString s ,highlighter->systemTaskFunction)
     if(!wordList.contains(s))wordList.append(s);
     wordList.sort();
-//    foreach(QString s,wordList)
-//    out<<" "<<s;
-
     QStringListModel *model = (QStringListModel*)(c->model());
         model->setStringList(wordList);
 }
@@ -113,9 +110,6 @@ QCompleter *TextEdit::completer() const
 
 void TextEdit::insertCompletion(const QString& completion)
 {
-  //  QTextStream out(stdout);
-
- //   out<<"ending completer"<<endl;
     if (c->widget() != this)
         return;
     QTextCursor tc = textCursor();
@@ -142,11 +136,6 @@ void TextEdit::focusInEvent(QFocusEvent *e)
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
-  //  QTextStream out(stdout);
-  //  out<<"********************"<<endl;
-  //  if(e->key()==Qt::Key_Enter)
-    //    resetCompleter();
-
     if (c && c->popup()->isVisible()) {
         completerInprogress = true;
 
@@ -242,7 +231,7 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
-void TextEdit::highlightCurrentLine()
+void TextEdit::highlightLineOnCusor()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
 
@@ -282,25 +271,5 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
          ++blockNumber;
      }
  }
-/*
-QString lastDocument = "";
-bool textEditDocumentChanged()
-{
-    QString document = ;
-    if(lastDocument.length() != document.length())
-    {
-        lastDocument = document;
-        return true;
-    }
-    return false;
-}
-void TextEdit::checkTextDocumentChanged()
-{
-    if(textEditDocumentChanged())
-        emit textDocumentChanged();
-}
-*/
-
-
 
 
