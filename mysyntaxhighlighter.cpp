@@ -50,7 +50,7 @@ QTextStream out(stdout);
    datatypes.append("inout");
 
 
-     HighlightingRule rule;
+     HighlighRule rule;
     QFont errorFont  = QFont("Courier",12);
     defaultFormat.setFont(errorFont);
     // defaultFormat.setUnderlineStyle(QTextCharFormat::);
@@ -72,12 +72,11 @@ QTextStream out(stdout);
            out<<"errow while reading file";
            return;
        }
-       QTextStream in(&file);
+        QTextStream in(&file);
         QString line = in.readLine();
         while (!line.isNull()) {
         keywordPatterns.append("\\b"+line+"\\b");
         keywords.append(line);
-
         line = in.readLine();
           }
         file.close();
@@ -128,13 +127,7 @@ QTextStream out(stdout);
 
        variableRule.pattern = QRegExp("[_a-zA-Z]+");
        variableRule.format = variableFormat;
-  /*     classFormat.setFontWeight(QFont::Bold);
-       classFormat.setForeground(Qt::darkMagenta);
-       classRule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
-       classRule.format = classFormat;
-       highlightingRules.append(classRule);
-*/
-       //operatorFormat.setFontWeight(QFont::Bold);
+
        operatorFormat.setForeground(Qt::darkRed);
        operatorRule.pattern = QRegExp("([\\*|\\+|\\-|\\/|\\%|&&|!|\\?|=|==|@]){1}");
        operatorRule.format = operatorFormat;
@@ -153,19 +146,14 @@ QTextStream out(stdout);
        highlightingRules.append(defineRule);
 
        parameterFormat.setFontWeight(QFont::Bold);
-     //  parameterFormat.setFontItalic(true);
        parameterFormat.setForeground(Qt::red);
-//       parameterRule.pattern = QRegExp("[\\n\\r].*parameter\\s*([^\\n\\r]*)");
-//       parameterRule.pattern = QRegExp("(?=(([a-zA-Z_]+)+\\sparameter))");
        parameterRule.pattern = QRegExp("hello (?=\\s+parameter\\s+)");
-
        parameterRule.format = parameterFormat;
        highlightingRules.append(parameterRule);
 
 
        ioFormat.setFontWeight(QFont::Bold);
        ioFormat.setForeground(Qt::red);
-     //  ioFormat.setFontItalic(true);
        ioRule.pattern = QRegExp("[\\n\\r].*(input|output)?\\s*([^\\n\\r]*)");
        ioRule.format = ioFormat;\
        highlightingRules.append(ioRule);
@@ -175,7 +163,7 @@ QTextStream out(stdout);
        systemFunctionFormat.setForeground(Qt::red);
        systemFunctionRule.pattern = QRegExp("\\$[a-zA-Z]+\\b");
        systemFunctionRule.format = systemFunctionFormat;
-       highlightingRules.append(systemFunctionRule);
+       //highlightingRules.append(systemFunctionRule);
 
        //single line comment format
         QFont font= QFont("Courier",12);
@@ -246,7 +234,7 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
   //  int textLength = text.length();
     if(text == "") countQuotion = 0;
     int index = 0;
-    foreach (const HighlightingRule &rule, highlightingRules) {
+    foreach (const HighlighRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
         while (index >= 0) {

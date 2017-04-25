@@ -11,11 +11,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    setFilter = tr("System Verilog(*.v *.sv)");
+    QString path = ":/resources/workingDirectory.txt";
+ QTextStream out(stdout);
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+          {
+        out<<"errow while reading file";
+    }
+    QTextStream in(&file);
+    directory = in.readLine();
+   file.close();
+    out<<directory<<endl;
     ui->setupUi(this);
     mywindow = new MyWindow(parent);
     ui->centralWidget->setLayout(mywindow);
     mythread = new CheckThread(mywindow);
     mythread->start();
+
 }
 //void MainWindow::resetHighlighter()
 //{
@@ -36,8 +49,9 @@ void MainWindow::on_actionNew_File_triggered()
 }
 
 void MainWindow::on_actionOpen_file_triggered()
+
 {
-    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv");
+    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv",&setFilter);
     if(!file.isEmpty()){
         QFile sFile(file);
         if(sFile.open(QFile::ReadOnly| QFile::Text)){
@@ -96,16 +110,7 @@ void MainWindow::on_actionRedo_triggered()
     mywindow->editor->textEdit->redo();
 }
 
-/*void MainWindow::onTextEditChanged()
-{
-    //QString *content;
-   QString  content; //= mywindow->textEdit->toPlainText();
-   // mywindow->textEdit->setHtml("<p style=\"color:red;\">" "</p>");
-    mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
 
-    //std::cout<< content.toStdString();
-}
-*/
 void MainWindow::on_actionShowHtml_triggered()
 {
   //  mywindow->textEdit->setHtml("<h6><p>Here is HTML content</p></h6>");
@@ -125,33 +130,35 @@ void MainWindow::onTextEditChanged()
     //mywindow->highlighter->setPattern(s);
 }
 
-//get keywords from file for completer
-/*
-QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName)
+
+
+void MainWindow::on_actionOpen_directory_triggered()
 {
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly))
-        return new QStringListModel(completer);
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly);
+    //directory = dialog.getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv",&setFilter);
+    directory =     dialog.getExistingDirectory(this,"Open working directory");
 
-#ifndef QT_NO_CURSOR
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-#endif
-    QStringList words;
-    // QTextStream out(stdout);
+    QTextStream out(stdout);
+    out<<"hello world"<<directory<<endl;
+    QString path = ":/resources/workingDirectory.txt";
 
-    while (!file.atEnd()) {
-        QByteArray line = file.readLine();
-     //  out<< line << "  "<<endl;
-        if (!line.isEmpty())
-            words << line.trimmed();
-    }
+    QFile outputFile(path);
+       outputFile.open(QIODevice::WriteOnly);
 
+       /* Check it opened OK */
+       if(!outputFile.isOpen()){
+           out<<"fucking file"<<endl;
+           return;
+       }
 
-#ifndef QT_NO_CURSOR
-    QApplication::restoreOverrideCursor();
-#endif
-    return new QStringListModel(words, completer);
+       /* Point a QTextStream object at the file */
+       QTextStream outStream(&outputFile);
+
+       /* Write the line to the file */
+       outStream << directory<<endl;
+
+       /* Close the file */
+       outputFile.close();
 }
-*/
-
-

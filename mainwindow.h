@@ -53,9 +53,13 @@ private slots:
 
    // void resetHighlighter();
 
+    void on_actionOpen_directory_triggered();
+
 public:
     Ui::MainWindow *ui;
     QString *mFileName;
+    QString directory;
+    QString setFilter;
     MyWindow *mywindow;
     CheckThread *mythread;
 

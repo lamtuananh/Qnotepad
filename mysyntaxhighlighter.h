@@ -37,69 +37,69 @@ public :
     QString modulePattern;
     QString commandPattern;
 
-    struct HighlightingRule
+    struct HighlighRule
         {
             QRegExp pattern;
             QTextCharFormat format;
         };
 
      QTextCharFormat defaultFormat;
-    QVector<HighlightingRule> highlightingRules;
+    QVector<HighlighRule> highlightingRules;
 
 
         QRegExp commentStartExpression;
         QRegExp commentEndExpression;
 
         QTextCharFormat keywordFormat;
-        HighlightingRule keywordRule;
+        HighlighRule keywordRule;
 
         QTextCharFormat includeFormat;
-        HighlightingRule includeRule;
+        HighlighRule includeRule;
 
         QTextCharFormat parameterFormat;
-        HighlightingRule parameterRule;
+        HighlighRule parameterRule;
 
         QTextCharFormat ioFormat;
-        HighlightingRule ioRule;
+        HighlighRule ioRule;
 
 
         QTextCharFormat defineFormat;
-        HighlightingRule defineRule;
+        HighlighRule defineRule;
 
         QTextCharFormat variableFormat;
-        HighlightingRule initVariableRule;
-        HighlightingRule variableRule;
+        HighlighRule initVariableRule;
+        HighlighRule variableRule;
 
         QTextCharFormat operatorFormat;
-        HighlightingRule operatorRule;
+        HighlighRule operatorRule;
 
         QTextCharFormat classFormat;
-        HighlightingRule classRule;
+        HighlighRule classRule;
 
         QTextCharFormat singleLineCommentFormat;
-        HighlightingRule singleLineCommentRule;
+        HighlighRule singleLineCommentRule;
 
         QTextCharFormat multiLineCommentFormat;
-        HighlightingRule multiLineCommentRule;
+        HighlighRule multiLineCommentRule;
 
         QTextCharFormat quotationFormat;
-        HighlightingRule quotationRule;
+        HighlighRule quotationRule;
 
         QTextCharFormat functionNameFormat;
-        HighlightingRule functionNameRule;
+        HighlighRule functionNameRule;
 
         QTextCharFormat numberFormat;
-        HighlightingRule decimalNumberRule,hexNumberRule,binaryNumberRule,realNumberRule,octalNumberRule;
+        HighlighRule decimalNumberRule,hexNumberRule,binaryNumberRule,realNumberRule,octalNumberRule;
 
         QTextCharFormat identifierFormat;
-        HighlightingRule identifierRule;
+        HighlighRule identifierRule;
 
 
         QTextCharFormat systemFunctionFormat;
-        HighlightingRule systemFunctionRule;
+        HighlighRule systemFunctionRule;
 
         QTextCharFormat blankFormat;
-        HighlightingRule blankRule;
+        HighlighRule blankRule;
 
 
         QTextCharFormat functionStart;

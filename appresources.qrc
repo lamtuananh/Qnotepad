@@ -12,5 +12,6 @@
     <qresource prefix="/resources">
         <file>keywords.txt</file>
         <file>systemTaskFunction.txt</file>
+        <file>workingDirectory.txt</file>
     </qresource>
 </RCC>
