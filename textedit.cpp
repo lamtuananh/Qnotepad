@@ -51,16 +51,7 @@ void TextEdit::resetHighlighter()
     highlighter->reset();
     highlighter->setDocument(this->document());
 }
-/*
-bool isInStringList(){
-return true;
-}
 
-void updateWordList()
-{
-
-}
-*/
 QString text;
 void TextEdit::resetCompleter()
 {

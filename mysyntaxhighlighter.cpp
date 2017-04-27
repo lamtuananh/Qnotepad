@@ -231,8 +231,6 @@ QString getText(const QString &text, int from, int to)
 }
 void MySyntaxHighlighter::highlightBlock(const QString &text)
 {
-  //  int textLength = text.length();
-    if(text == "") countQuotion = 0;
     int index = 0;
     foreach (const HighlighRule &rule, highlightingRules) {
         QRegExp expression(rule.pattern);
@@ -277,10 +275,8 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         {
             if(std::find(variableNames.begin(),variableNames.end(),varName) == variableNames.end())
             {
-                out<<"datatype is :" <<datatype<<endl;
                 if(datatype.compare("parameter")==0)
                 {
-                    out<<"Parametereererre"<<endl;
                     parameterNames.append(varName);
                 }
                     else
@@ -293,7 +289,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
                         variableNames.append(varName);
 
             }
-                //setFormat(affterDatatypeIndex+varindex,varlength,variableRule.format);
         }
         boolean isFinish = false; // check semicolon char
        if(isFinish) break;
@@ -308,7 +303,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         int index = expression.indexIn(text);
         while (index >= 0) {
             int length = expression.matchedLength();
-              out<<"checking "<<endl;
             setFormat(index, length, variableFormat);
             index = expression.indexIn(text, index + length);
         }
@@ -319,7 +313,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         int index = expression.indexIn(text);
         while (index >= 0) {
             int length = expression.matchedLength();
-              out<<"checking "<<endl;
             setFormat(index, length, parameterFormat);
             index = expression.indexIn(text, index + length);
         }
@@ -330,7 +323,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
         int index = expression.indexIn(text);
         while (index >= 0) {
             int length = expression.matchedLength();
-              out<<"checking "<<endl;
             setFormat(index, length, ioFormat);
             index = expression.indexIn(text, index + length);
         }
@@ -347,18 +339,15 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
           index = singleLineCommentexpression.indexIn(text, index + length);
     }
 
-  //  out<<"check point 0" << endl;
     setCurrentBlockState(OUTOFCOMMENT);
         int startIndex = 0;
         if (previousBlockState() != INCOMMENT)
             startIndex = commentStartExpression.indexIn(text);
 
-  //      out<<"check point 1" << endl;
         int coutQuotion = 0;
         for(int i=0;i<startIndex;i++)
             if(text.at(i) == '"') coutQuotion++;
 
-  //      out<<"check point 2" << endl;
         while (startIndex >= 0 && coutQuotion%2 ==0) {
             int endIndex = commentEndExpression.indexIn(text, startIndex);
             int commentLength;
@@ -366,7 +355,6 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
                 setCurrentBlockState(INCOMMENT);
                 commentLength = text.length() - startIndex;
 
- //               out<<"check point 3" << endl;
             } else {
                 commentLength = endIndex - startIndex
                                 + commentEndExpression.matchedLength();
@@ -374,19 +362,11 @@ void MySyntaxHighlighter::highlightBlock(const QString &text)
              if(previousBlockState()!= INSTRING) setFormat(startIndex, commentLength, multiLineCommentFormat);
             startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
 
-   //         out<<"check point 4" << endl;
         }
-  /*      out<<"Variable names "<<endl;
-        for(QString var:variableNames)
-            out<<var<<" ";
-*/
-
 
         QRegExp expression(parameterRule.pattern);
-        out<<"xxxxxxxxxxxxxxxxxxxxxxx";
          index = expression.indexIn(text);
         while (index >= 0) {
-             out<<"check point 4 " << endl;
             int length = expression.matchedLength();
             setFormat(index, length, parameterRule.format);
             out<<index<<" "<<length<<endl;

@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    setFilter = tr("System Verilog(*.v *.sv)");
+    setFilter = tr("VHDL (*.v *.sv)");
     QString path = ":/resources/workingDirectory.txt";
  QTextStream out(stdout);
     QFile file(path);
@@ -30,12 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mythread->start();
 
 }
-//void MainWindow::resetHighlighter()
-//{
-   // mythread->start();
-//    mywindow->highlighter->reset();
-//    mywindow->highlighter->setDocument( mywindow->editor->textEdit->document());
-//}
 
 MainWindow::~MainWindow()
 {
@@ -51,7 +45,8 @@ void MainWindow::on_actionNew_File_triggered()
 void MainWindow::on_actionOpen_file_triggered()
 
 {
-    QString file= QFileDialog::getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv",&setFilter);
+    const QString dir = directory;
+    QString file= QFileDialog::getOpenFileName(this,"Open the file",dir,tr("All files (*.v *.sv);;VHDL (*.v);;SystemVerilog (*.sv)" ));
     if(!file.isEmpty()){
         QFile sFile(file);
         if(sFile.open(QFile::ReadOnly| QFile::Text)){
@@ -68,21 +63,21 @@ void MainWindow::on_actionOpen_file_triggered()
 void MainWindow::on_actionSave_file_triggered()
 {
     if( mywindow->currentFileName=="")
-         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv");
+         mywindow->currentFileName = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files",tr("All files (*.v *.sv);;VHDL (*.v);;SystemVerilog (*.sv)" ));
 
     QFile sFile( mywindow->currentFileName);
     if(sFile.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream out(&sFile);
         //cout<<mywindow->textEdit->toPlainText();
-
+        out<<mywindow->editor->textEdit->toPlainText();
         sFile.flush();
         sFile.close();
     }
 }
 void MainWindow::on_actionSave_as_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files","*.v *.sv");
+    QString file = QFileDialog::getSaveFileName(this,"Open file to save","C:\\Program Files",tr("All files (*.v *.sv);;VHDL (*.v);;SystemVerilog (*.sv)" ));
     if(!file.isEmpty())
     {
          mywindow->currentFileName = file;
@@ -137,7 +132,6 @@ void MainWindow::on_actionOpen_directory_triggered()
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setOption(QFileDialog::ShowDirsOnly);
-    //directory = dialog.getOpenFileName(this,"Open the file","C:\\Program Files","*.v *.sv",&setFilter);
     directory =     dialog.getExistingDirectory(this,"Open working directory");
 
     QTextStream out(stdout);
