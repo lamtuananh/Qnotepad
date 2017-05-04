@@ -153,7 +153,7 @@ QTextStream out(stdout);
 
 
        ioFormat.setFontWeight(QFont::Bold);
-       ioFormat.setForeground(Qt::red);
+       ioFormat.setForeground(Qt::green);
        ioRule.pattern = QRegExp("[\\n\\r].*(input|output)?\\s*([^\\n\\r]*)");
        ioRule.format = ioFormat;\
        highlightingRules.append(ioRule);

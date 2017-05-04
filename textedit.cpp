@@ -58,16 +58,18 @@ void TextEdit::resetCompleter()
     QTextStream out(stdout);
     wordList.clear();
     text= this->document()->toPlainText();
-    QRegExp expression("\\b[_a-zA-Z]+\\b");
+    QRegExp expression("\\b[A-Za-z_0-9]+\\b");
     int index = expression.indexIn(text);
 
     while (index >= 0) {
         int length = expression.matchedLength();
         QString word = text.mid(index,length);
+            out<<word<<" "<<endl;
            if(!wordList.contains(word))
                wordList.append(word);
         index = expression.indexIn(text, index + length);
     }
+
     foreach(QString s ,highlighter->keywords)
     if(!wordList.contains(s))wordList.append(s);
     foreach(QString s ,highlighter->systemTaskFunction)
@@ -89,7 +91,7 @@ void TextEdit::setCompleter(QCompleter *completer)
 
     c->setWidget(this);
     c->setCompletionMode(QCompleter::PopupCompletion);
-    c->setCaseSensitivity(Qt::CaseInsensitive);
+    c->setCaseSensitivity(Qt::CaseSensitive);
     QObject::connect(c, SIGNAL(activated(QString)),
                      this, SLOT(insertCompletion(QString)));
 }
@@ -162,7 +164,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         resetCompleter();
     //    out<<"hello worlds"<<endl;
     }
-        if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+        if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 2
                       || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
 

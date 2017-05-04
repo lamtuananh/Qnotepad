@@ -56,6 +56,7 @@ void MainWindow::on_actionOpen_file_triggered()
             sFile.close();
 
             mywindow->editor->textEdit->setPlainText(text);
+            mywindow->editor->textEdit->resetCompleter();
         }
     }
 }
