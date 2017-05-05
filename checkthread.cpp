@@ -14,11 +14,10 @@ void CheckThread ::run()
     while(true)
     {
         i++;
-        if(i==5){
-       // emit mywindow->editor->textEdit->activateResetHighlighter();
+        if(i==10){
+        emit mywindow->editor->textEdit->activateResetHighlighter();
         i=0;
         }
         sleep(1);
-        //emit mywindow->editor->textEdit->activateUpdateCompleter();
     }
 }

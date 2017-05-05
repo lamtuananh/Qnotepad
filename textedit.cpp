@@ -22,14 +22,14 @@ class QProgressBar;
 class TextEdit;
 boolean completerInprogress=false;
 TextEdit::TextEdit(QWidget *parent)
-: QPlainTextEdit(parent), c(0)
+: QPlainTextEdit(parent), completeTool(0)
 
 //TextEdit::TextEdit()
 {
    // wordList = new QStringList();
     wordList.append("module");
     wordList.append("endmodule");
-    model = new QStringListModel(wordList,c);
+    model = new QStringListModel(wordList,completeTool);
     setLineWrapMode(QPlainTextEdit::NoWrap);
     lineNumberArea = new LineNumberArea(this);
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -53,66 +53,72 @@ void TextEdit::resetHighlighter()
 }
 
 QString text;
+/**
+ * @brief TextEdit::resetCompleter
+ * update new word of remove deleted words from autocomplete word list
+ */
 void TextEdit::resetCompleter()
 {
-    QTextStream out(stdout);
-    wordList.clear();
-    text= this->document()->toPlainText();
-    QRegExp expression("\\b[A-Za-z_0-9]+\\b");
-    int index = expression.indexIn(text);
+    wordList.clear(); //clear word list first
+    text= this->document()->toPlainText(); // get text from editor
+    QRegExp expression("\\b[A-Za-z_0-9]+\\b"); // define regular expression for word
+    int index = expression.indexIn(text); //find index match with reg. expression
 
     while (index >= 0) {
         int length = expression.matchedLength();
-        QString word = text.mid(index,length);
-            out<<word<<" "<<endl;
-           if(!wordList.contains(word))
-               wordList.append(word);
+        QString word = text.mid(index,length); //get word
+           if(!wordList.contains(word)) // if the found word is not in word list
+               wordList.append(word); //add it to word list
         index = expression.indexIn(text, index + length);
     }
 
-    foreach(QString s ,highlighter->keywords)
-    if(!wordList.contains(s))wordList.append(s);
-    foreach(QString s ,highlighter->systemTaskFunction)
-    if(!wordList.contains(s))wordList.append(s);
-    wordList.sort();
-    QStringListModel *model = (QStringListModel*)(c->model());
+    foreach(QString s ,highlighter->keywords) // for each keywords
+    if(!wordList.contains(s))wordList.append(s); // add to word list
+    foreach(QString s ,highlighter->systemTaskFunction) // same as keywords
+    if(!wordList.contains(s))wordList.append(s); //system function tasks added to word list
+    wordList.sort(); // sort word list for completer
+    QStringListModel *model = (QStringListModel*)(completeTool->model()); //update wordlist of complete tool.
         model->setStringList(wordList);
 }
 
 void TextEdit::setCompleter(QCompleter *completer)
 {
-    if (c)
-        QObject::disconnect(c, 0, this, 0);
+    if (completeTool)
+        QObject::disconnect(completeTool, 0, this, 0);
 
-    c = completer;
+    completeTool = completer;
 
-    if (!c)
+    if (!completeTool)
         return;
 
-    c->setWidget(this);
-    c->setCompletionMode(QCompleter::PopupCompletion);
-    c->setCaseSensitivity(Qt::CaseSensitive);
-    QObject::connect(c, SIGNAL(activated(QString)),
+    completeTool->setWidget(this);
+    completeTool->setCompletionMode(QCompleter::PopupCompletion);
+    completeTool->setCaseSensitivity(Qt::CaseSensitive);
+    QObject::connect(completeTool, SIGNAL(activated(QString)),
                      this, SLOT(insertCompletion(QString)));
 }
 
 QCompleter *TextEdit::completer() const
 {
-    return c;
+    return completeTool;
 }
 
 void TextEdit::insertCompletion(const QString& completion)
 {
-    if (c->widget() != this)
+    if (completeTool->widget() != this)
         return;
     QTextCursor tc = textCursor();
-    int extra = completion.length() - c->completionPrefix().length();
+    int extra = completion.length() - completeTool->completionPrefix().length();
     tc.movePosition(QTextCursor::Left);
     tc.movePosition(QTextCursor::EndOfWord);
     tc.insertText(completion.right(extra));
     setTextCursor(tc);
 }
-
+/**
+ * @brief TextEdit::textUnderCursor
+ * get text typed by user under cursor
+ * @return
+ */
 QString TextEdit::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
@@ -122,14 +128,14 @@ QString TextEdit::textUnderCursor() const
 
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
-    if (c)
-        c->setWidget(this);
+    if (completeTool)
+        completeTool->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
-    if (c && c->popup()->isVisible()) {
+    if (completeTool && completeTool->popup()->isVisible()) {
         completerInprogress = true;
 
         // The following keys are forwarded by the completer to the widget
@@ -147,11 +153,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     }
 
     bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
-    if (!c || !isShortcut) // do not process the shortcut when we have a completer
+    if (!completeTool || !isShortcut) // do not process the shortcut when we have a completer
         QPlainTextEdit::keyPressEvent(e);
 
     const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-    if (!c || (ctrlOrShift && e->text().isEmpty()))
+    if (!completeTool || (ctrlOrShift && e->text().isEmpty()))
     {
         return;
 }
@@ -162,29 +168,23 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     if(eow.contains(e->key())||e->key()==Qt::Key_Enter ||e->key()==Qt::Key_Space )
     {
         resetCompleter();
-    //    out<<"hello worlds"<<endl;
     }
         if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 2
                       || eow.contains(e->text().right(1)))) {
-        c->popup()->hide();
-
-   //     out<<"check 1"<<endl;
+        completeTool->popup()->hide();
          return;
     }
 
-  //  out<<"check 2"<<endl;
-    if (completionPrefix != c->completionPrefix()) {
-        c->setCompletionPrefix(completionPrefix);
-        c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
-   //     out<<"check 3"<<endl;
-
+    if (completionPrefix != completeTool->completionPrefix()) {
+        completeTool->setCompletionPrefix(completionPrefix);
+        completeTool->popup()->setCurrentIndex(completeTool->completionModel()->index(0, 0));
     }
 
 
     QRect cr = cursorRect();
-    cr.setWidth(c->popup()->sizeHintForColumn(0)
-                + c->popup()->verticalScrollBar()->sizeHint().width());
-    c->complete(cr); // popup it up!
+    cr.setWidth(completeTool->popup()->sizeHintForColumn(0)
+                + completeTool->popup()->verticalScrollBar()->sizeHint().width());
+    completeTool->complete(cr); // popup it up!
 }
 
 

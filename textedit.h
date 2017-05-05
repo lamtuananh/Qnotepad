@@ -21,7 +21,7 @@ public:
     ~TextEdit();
 
     //completer
-    void setCompleter(QCompleter *c);
+    void setCompleter(QCompleter *completeTool);
     QCompleter *completer() const;
 
     //count lines
@@ -57,8 +57,7 @@ private slots:
 signals:
     void activateResetHighlighter();
     void activateUpdateCompleter();
-    //bool textEditDocumentChanged();
-   // void textDocumentChanged();
+
 
 private:
     QString textUnderCursor() const;
@@ -66,10 +65,9 @@ private:
     QWidget *lineNumberArea; // count line variable
 
 public:
-
-    QCompleter *c;
-    QStringList wordList;
-    QStringListModel *model;
+    QCompleter *completeTool; //GUI class use to show popup for word menu to complete.
+    QStringList wordList; // word list for complete tool
+    QStringListModel *model; // the model used for completerTool variable.
 };
 
 #endif // TEXTEDIT_H

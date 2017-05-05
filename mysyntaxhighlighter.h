@@ -109,8 +109,14 @@ public :
 
         QTextCharFormat moduleStart;
         QTextCharFormat moduleEnd;
+
+        QVector<QRegExp> codeBlocks;
+        QRegExp moduleBlock,functionBlock,beginEndBlock;
+
+
         QRegExp moduleStartExpression;
         QRegExp moduleEndExpression;
+
 
         QTextCharFormat beginStart;
         QTextCharFormat beginEnd;
